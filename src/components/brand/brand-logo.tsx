@@ -9,9 +9,9 @@ const SRC = {
 } as const;
 
 const HEIGHTS = {
-  header: "h-[56px]",
-  menu: "h-[86px]",
-  login: "h-[124px]",
+  header: "h-12",
+  menu: "h-[78px]",
+  login: "h-[72px]",
 } as const;
 
 export function BrandLogo({
@@ -24,17 +24,10 @@ export function BrandLogo({
   className?: string;
 }) {
   const theme = useTheme().theme;
-  const white = inverted || theme === "acal";
-  const plate = !inverted && theme === "acal";
+  const white = inverted || theme === "dark";
 
   return (
-    <span
-      className={cn(
-        "inline-flex items-center justify-center",
-        plate && "rounded-2xl bg-[var(--logo-plate)] px-3.5 py-2.5",
-        className,
-      )}
-    >
+    <span className={cn("inline-flex items-center justify-center", className)}>
       <img
         src={white ? SRC.white : SRC.blue}
         alt="Acal"
