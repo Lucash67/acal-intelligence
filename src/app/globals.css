@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+/*
+  ACAL Intelligence — design tokens + themes
+  Primary amostrado do wordmark oficial da ACAL (#009CE0).
+  TODO(ACAL-BRAND): validar códigos HEX oficiais da identidade visual da ACAL.
+  TODO(ACAL-BRAND): substituir tokens provisórios pelos códigos cromáticos oficiais do Brandbook ACAL 2024.
+*/
+
+:root,
+[data-theme="acal"] {
+  --acal-primary: #009ce0;
+  --acal-primary-light: #6fd0f2;
+  --acal-primary-dark: #0077ab;
+  --acal-accent: #009ce0;
+  --background-primary: #8ed8f2;
+  --background-secondary: #009ce0;
+  --surface: #f4fbfe;
+  --bg: var(--background-primary);
+  --bg-elevated: var(--background-secondary);
+  --bg-card: var(--surface);
+  --bg-hover: #d2f1fb;
+  --border: #5fcae8;
+  --border-strong: #2bb0e0;
+  --text: #06344a;
+  --text-primary: #06344a;
+  --text-secondary: #1f6480;
+  --text-muted: var(--text-secondary);
+  --text-subtle: #3d7f97;
+  --accent: #006894;
+  --accent-strong: #05587a;
+  --accent-dim: rgba(255, 255, 255, 0.28);
+  --success: #2f8a5f;
+  --warning: #c08e0c;
+  --danger: #c24b4b;
+  --info: #0077ab;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --shadow-card: 0 0 0 1px rgba(0, 119, 171, 0.08), 0 16px 32px rgba(0, 88, 122, 0.12);
+  --glow: rgba(255, 255, 255, 0.35);
+  --page-glow: #c9eef9;
+  --page-mid: #8ed8f2;
+  --page-deep: #6fceec;
+  --scrollbar: #3bb6e0;
+  --logo-plate: #0077ab;
+  --nav-text: #ffffff;
+  --nav-muted: rgba(255, 255, 255, 0.78);
+  --nav-active-bg: rgba(255, 255, 255, 0.2);
+  --nav-active-text: #ffffff;
+}
+
+[data-theme="dark"] {
+  --acal-primary: #009ce0;
+  --acal-primary-light: #4db8e8;
+  --acal-primary-dark: #0077ab;
+  --acal-accent: #009ce0;
+  --background-primary: #061018;
+  --background-secondary: #0a1620;
+  --surface: #10202b;
+  --bg: var(--background-primary);
+  --bg-elevated: var(--background-secondary);
+  --bg-card: var(--surface);
+  --bg-hover: #162833;
+  --border: #243644;
+  --border-strong: #314858;
+  --text: #f3f7fa;
+  --text-primary: #f3f7fa;
+  --text-secondary: #8ea3b3;
+  --text-muted: var(--text-secondary);
+  --text-subtle: #5e7382;
+  --accent: var(--acal-primary);
+  --accent-strong: var(--acal-primary-light);
+  --accent-dim: rgba(0, 156, 224, 0.14);
+  --success: #3d9a6e;
+  --warning: #d4a017;
+  --danger: #d15b5b;
+  --info: var(--acal-primary-light);
+  --shadow-card: 0 0 0 1px rgba(0, 156, 224, 0.08), 0 18px 40px rgba(0, 8, 16, 0.38);
+  --glow: rgba(0, 156, 224, 0.12);
+  --page-glow: #08141d;
+  --page-mid: #061018;
+  --page-deep: #050e14;
+  --scrollbar: #243644;
+  --logo-plate: #061018;
+  --nav-text: #f3f7fa;
+  --nav-muted: #8ea3b3;
+  --nav-active-bg: rgba(0, 156, 224, 0.14);
+  --nav-active-text: #4db8e8;
+}
+
+[data-theme="light"] {
+  --acal-primary: #009ce0;
+  --acal-primary-light: #2aade6;
+  --acal-primary-dark: #0077ab;
+  --acal-accent: #009ce0;
+  --background-primary: #f3f7fa;
+  --background-secondary: #ffffff;
+  --surface: #ffffff;
+  --bg: var(--background-primary);
+  --bg-elevated: var(--background-secondary);
+  --bg-card: var(--surface);
+  --bg-hover: #e7eef3;
+  --border: #d3dee6;
+  --border-strong: #b7c7d2;
+  --text: #12202a;
+  --text-primary: #12202a;
+  --text-secondary: #5b7382;
+  --text-muted: var(--text-secondary);
+  --text-subtle: #7f93a0;
+  --accent: var(--acal-primary-dark);
+  --accent-strong: var(--acal-primary-dark);
+  --accent-dim: rgba(0, 156, 224, 0.1);
+  --success: #2f8a5f;
+  --warning: #c08e0c;
+  --danger: #c24b4b;
+  --info: var(--acal-primary);
+  --shadow-card: 0 0 0 1px rgba(18, 32, 42, 0.04), 0 14px 28px rgba(18, 32, 42, 0.06);
+  --glow: rgba(0, 156, 224, 0.08);
+  --page-glow: #eef5f9;
+  --page-mid: #f3f7fa;
+  --page-deep: #e8eef3;
+  --scrollbar: #c5d2db;
+  --logo-plate: #061018;
+  --nav-text: #12202a;
+  --nav-muted: #5b7382;
+  --nav-active-bg: rgba(0, 156, 224, 0.1);
+  --nav-active-text: #0077ab;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-card: var(--bg-card);
+  --color-bg-hover: var(--bg-hover);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-subtle: var(--text-subtle);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-dim: var(--accent-dim);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+  --color-acal-primary: var(--acal-primary);
+  --color-acal-primary-light: var(--acal-primary-light);
+  --color-acal-primary-dark: var(--acal-primary-dark);
+  --color-nav-text: var(--nav-text);
+  --color-nav-muted: var(--nav-muted);
+  --color-nav-active-bg: var(--nav-active-bg);
+  --color-nav-active-text: var(--nav-active-text);
+  --font-sans: var(--font-plus-jakarta);
+  --font-mono: var(--font-ibm-plex-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  background: var(--background-primary);
+  color: var(--text-primary);
+}
+
+body {
+  font-family: var(--font-plus-jakarta), sans-serif;
+  background-image:
+    radial-gradient(circle at 12% -10%, var(--glow), transparent 34%),
+    linear-gradient(180deg, var(--page-glow) 0%, var(--page-mid) 48%, var(--page-deep) 100%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  border-radius: 999px;
+}
+
+.number {
+  font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  font-feature-settings: "tnum";
+}

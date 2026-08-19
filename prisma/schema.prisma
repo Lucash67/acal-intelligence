@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum ReportPeriod {
+  MORNING
+  AFTERNOON
+}
+
+enum ExecutionStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  FAILED
+}
+
+enum DeliveryStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  RETRYING
+}
+
+enum DeliveryChannel {
+  WHATSAPP
+}
+
+enum LogStatus {
+  INFO
+  SUCCESS
+  FAILED
+}
+
+model Store {
+  id         String             @id
+  name       String
+  city       String
+  status     String             @default("ACTIVE")
+  dailyTarget Decimal           @db.Decimal(12, 2)
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+  manager    Manager?
+  executions ReportExecution[]
+
+  @@map("stores")
+}
+
+model Manager {
+  id        String   @id @default(cuid())
+  storeId   String   @unique
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  name      String
+  phone     String
+  createdAt DateTime @default(now())
+
+  @@map("managers")
+}
+
+model ReportExecution {
+  id            String           @id @default(cuid())
+  storeId       String
+  store         Store            @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  reportType    ReportPeriod
+  referenceDate DateTime         @db.Date
+  startedAt     DateTime         @default(now())
+  finishedAt    DateTime?
+  status        ExecutionStatus  @default(PENDING)
+  error         String?
+  attempts      Int              @default(1)
+  reports       Report[]
+  deliveries    ReportDelivery[]
+  logs          SystemLog[]
+
+  @@index([storeId, startedAt])
+  @@index([status])
+  @@map("report_executions")
+}
+
+model Report {
+  id            String          @id @default(cuid())
+  executionId   String
+  execution     ReportExecution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+  storeId       String
+  period        ReportPeriod
+  referenceDate DateTime        @db.Date
+  metricsJson   Json
+  analysisJson  Json
+  reportJson    Json
+  visualHtml    String?         @db.Text
+  createdAt     DateTime        @default(now())
+
+  @@index([storeId, createdAt])
+  @@map("reports")
+}
+
+model ReportDelivery {
+  id          String          @id @default(cuid())
+  executionId String
+  execution   ReportExecution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+  channel     DeliveryChannel @default(WHATSAPP)
+  recipient   String
+  status      DeliveryStatus  @default(PENDING)
+  attempts    Int             @default(0)
+  sentAt      DateTime?
+  error       String?
+  createdAt   DateTime        @default(now())
+
+  @@index([status, createdAt])
+  @@map("report_deliveries")
+}
+
+model SystemLog {
+  id          String           @id @default(cuid())
+  executionId String?
+  execution   ReportExecution? @relation(fields: [executionId], references: [id], onDelete: SetNull)
+  storeId     String?
+  stage       String
+  timestamp   DateTime         @default(now())
+  durationMs  Int?
+  status      LogStatus
+  error       String?
+  message     String?
+
+  @@index([executionId])
+  @@index([storeId, timestamp])
+  @@index([timestamp])
+  @@map("system_logs")
+}
