@@ -9,9 +9,9 @@ const SRC = {
 } as const;
 
 const HEIGHTS = {
-  header: "h-12",
+  header: "h-10",
   menu: "h-[78px]",
-  login: "h-[72px]",
+  login: "h-11",
 } as const;
 
 export function BrandLogo({
@@ -31,8 +31,8 @@ export function BrandLogo({
       <img
         src={white ? SRC.white : SRC.blue}
         alt="Acal"
-        width={484}
-        height={375}
+        width={475}
+        height={366}
         className={cn("w-auto object-contain object-left", HEIGHTS[size])}
       />
     </span>

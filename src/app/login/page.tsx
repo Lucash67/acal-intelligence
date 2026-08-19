@@ -76,17 +76,17 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <div className="fixed inset-0 overflow-hidden">
-      <header className="mx-auto flex h-[88px] max-w-5xl items-center justify-between gap-4 px-5 md:px-8">
+      <header className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-5 md:px-8">
         <BrandLockup size="login" />
         <div className="flex items-center gap-3">
-          <span className="hidden rounded-full bg-bg-card px-3 py-1.5 text-[12px] font-semibold text-text sm:inline">
+          <span className="hidden rounded-full bg-bg-card px-3.5 py-1.5 text-[12px] font-semibold text-text sm:inline">
             Ambiente simulado
           </span>
           <ThemeSwitcher compact surface="page" />
         </div>
       </header>
 
-      <main className="mx-auto flex h-[calc(100dvh-88px)] max-w-5xl flex-col items-center justify-center px-5 pb-8 md:px-8">
+      <main className="mx-auto flex h-[calc(100dvh-64px)] max-w-5xl flex-col items-center justify-center px-5 pb-8 md:px-8">
         <section className="max-w-xl text-center">
           <p className="inline-flex rounded-full bg-[var(--accent-dim)] px-3 py-1 text-[12px] font-semibold text-accent">
             Produto interno

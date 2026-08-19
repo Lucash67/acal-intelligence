@@ -8,16 +8,29 @@ export function BrandLockup({
   inverted?: boolean;
   size?: "header" | "menu" | "login";
 }) {
-  const login = size === "login";
+  if (size === "login") {
+    return (
+      <div className="flex items-center gap-3">
+        <BrandLogo inverted={inverted} size="login" />
+        <p
+          className={cn(
+            "text-[15px] font-semibold tracking-tight",
+            inverted ? "text-white" : "text-text",
+          )}
+        >
+          intelligence
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className={cn("flex flex-col items-start", login ? "gap-1" : "gap-0.5")}>
+    <div className="flex flex-col items-start gap-0.5">
       <BrandLogo inverted={inverted} size={size} />
       {size === "header" ? null : (
         <p
           className={cn(
-            "lowercase leading-none",
-            login ? "text-[13px] font-semibold tracking-tight" : "text-[11px]",
+            "text-[11px] lowercase leading-none",
             inverted ? "text-white/70" : "text-text-muted",
           )}
         >
