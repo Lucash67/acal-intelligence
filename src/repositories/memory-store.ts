@@ -10,6 +10,7 @@ import { MOCK_STORES } from "@/mocks/stores";
 import { buildMockAnalysis } from "@/providers/ai/mock-ai-provider";
 import { computeStoreMetrics } from "@/services/analytics-engine";
 import { ReportGenerator } from "@/services/report-generator";
+import { renderExecutiveReportHtml } from "@/templates/morning-report-html";
 
 export type PersistedReport = ExecutiveReport & {
   executionId: string;
@@ -26,7 +27,7 @@ type MemoryState = {
   seeded: boolean;
 };
 
-const CATALOG_VERSION = 2;
+const CATALOG_VERSION = 3;
 const globalMemory = globalThis as unknown as { acalMemory?: MemoryState };
 
 function emptyState(): MemoryState {
@@ -70,6 +71,7 @@ function seedMemoryHistory(current: MemoryState) {
     { storeId: "conceito-aldeota", period: "AFTERNOON" as const, date: yesterday, status: "SUCCESS" as const },
     { storeId: "parangaba", period: "MORNING" as const, date: today, status: "SUCCESS" as const },
     { storeId: "parque-soledade", period: "MORNING" as const, date: today, status: "SUCCESS" as const },
+    { storeId: "aldeota", period: "AFTERNOON" as const, date: today, status: "SUCCESS" as const },
     { storeId: "limoeiro", period: "MORNING" as const, date: today, status: "FAILED" as const },
   ];
 
@@ -138,7 +140,7 @@ function seedMemoryHistory(current: MemoryState) {
     current.reports.push({
       ...report,
       executionId,
-      visualHtml: null,
+      visualHtml: renderExecutiveReportHtml(report),
     });
     current.deliveries.push({
       id: createId(),

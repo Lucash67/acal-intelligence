@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import type { ExecutiveReport } from "@/domain/report";
-import { renderMorningReportHtml } from "@/templates/morning-report-html";
+import { renderExecutiveReportHtml } from "@/templates/morning-report-html";
 
 export type VisualRenderResult = {
   html: string;
@@ -10,7 +10,7 @@ export type VisualRenderResult = {
 };
 
 export async function renderVisualReport(report: ExecutiveReport): Promise<VisualRenderResult> {
-  const html = renderMorningReportHtml(report);
+  const html = renderExecutiveReportHtml(report);
 
   try {
     const { chromium } = await import("playwright");

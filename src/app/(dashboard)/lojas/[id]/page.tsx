@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/layout/page-header";
 import { RunPipelineButton } from "@/components/pipeline/run-pipeline-button";
-import { MorningReportCard } from "@/components/reports/morning-report-card";
+import { ExecutiveReportCard } from "@/components/reports/morning-report-card";
 import { Badge, statusTone } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { provenanceLabel, unitTypeLabel } from "@/domain/provenance";
@@ -97,7 +97,7 @@ export default async function StoreDetailPage({
             </Card>
           </div>
           <div className="grid items-start gap-6 xl:grid-cols-[1fr_360px]">
-            <MorningReportCard report={preview} />
+            <ExecutiveReportCard report={preview} />
             <Card>
               <CardTitle>Execuções da loja</CardTitle>
               <div className="space-y-3">

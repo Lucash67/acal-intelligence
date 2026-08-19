@@ -38,6 +38,32 @@ export default function SettingsPage() {
             <Badge tone="warning">Gerentes e códigos internos pendentes</Badge>
           </div>
         </Card>
+        <Card className="lg:col-span-2">
+          <CardTitle>Prontidão do MVP (fase 2)</CardTitle>
+          <p className="mb-4 text-sm text-text-muted">
+            Tudo abaixo é demonstrável com mock. Integração real fica para a fase 3, depois da validação.
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="text-[11px] uppercase tracking-[0.14em] text-text-subtle">
+                <tr>
+                  <th className="pb-3 font-medium">Item</th>
+                  <th className="pb-3 font-medium">Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ReadyRow item="Estrutura pública das unidades" state="Pronto" tone="success" />
+                <ReadyRow item="Pipeline BUSCA → CALCULA → ANALISA → MONTA → ENVIA → REGISTRA" state="Pronto" tone="success" />
+                <ReadyRow item="Relatório matinal e vespertino" state="Pronto" tone="success" />
+                <ReadyRow item="Card 1080×1350 e preview de WhatsApp" state="Pronto" tone="success" />
+                <ReadyRow item="Falha isolada por loja" state="Pronto" tone="success" />
+                <ReadyRow item="PNG via Playwright no servidor" state="Pendente de validação" tone="warning" />
+                <ReadyRow item="Regras oficiais de meta, estoque e ranking" state="Pendente de validação" tone="warning" />
+                <ReadyRow item="Fonte de dados, WhatsApp e TI de produção" state="Dependente da TI" tone="warning" />
+              </tbody>
+            </table>
+          </div>
+        </Card>
         <Card>
           <CardTitle>Provedores ativos</CardTitle>
           <dl className="space-y-3 text-sm">
@@ -125,6 +151,25 @@ function Swatch({ name, value, className }: { name: string; value: string; class
       <p className="text-xs">{name}</p>
       <p className="font-mono text-[11px] text-text-muted">{value}</p>
     </div>
+  );
+}
+
+function ReadyRow({
+  item,
+  state,
+  tone,
+}: {
+  item: string;
+  state: string;
+  tone: "success" | "warning";
+}) {
+  return (
+    <tr className="border-t border-border">
+      <td className="py-3">{item}</td>
+      <td className="py-3">
+        <Badge tone={tone}>{state}</Badge>
+      </td>
+    </tr>
   );
 }
 

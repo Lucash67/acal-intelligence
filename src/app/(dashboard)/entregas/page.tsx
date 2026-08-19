@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge, statusTone } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -25,6 +26,7 @@ export default async function DeliveriesPage() {
               <th className="px-5 pb-3 pt-5 font-medium">Horário</th>
               <th className="px-5 pb-3 pt-5 font-medium">Tentativas</th>
               <th className="px-5 pb-3 pt-5 font-medium">Status</th>
+              <th className="px-5 pb-3 pt-5 font-medium">Preview</th>
             </tr>
           </thead>
           <tbody>
@@ -32,7 +34,11 @@ export default async function DeliveriesPage() {
               const store = stores.find((item) => item.id === delivery.storeId);
               return (
                 <tr key={delivery.id} className="border-t border-border">
-                  <td className="px-5 py-4">{store?.name ?? delivery.storeId}</td>
+                  <td className="px-5 py-4">
+                    <Link href={`/entregas/${delivery.id}`} className="text-accent">
+                      {store?.name ?? delivery.storeId}
+                    </Link>
+                  </td>
                   <td className="px-5 py-4 text-text-muted">{delivery.recipient}</td>
                   <td className="px-5 py-4">{statusLabel(delivery.channel)}</td>
                   <td className="px-5 py-4 text-text-muted">
@@ -41,6 +47,11 @@ export default async function DeliveriesPage() {
                   <td className="px-5 py-4">{delivery.attempts}</td>
                   <td className="px-5 py-4">
                     <Badge tone={statusTone(delivery.status)}>{statusLabel(delivery.status)}</Badge>
+                  </td>
+                  <td className="px-5 py-4">
+                    <Link href={`/entregas/${delivery.id}`} className="text-accent">
+                      Ver disparo
+                    </Link>
                   </td>
                 </tr>
               );

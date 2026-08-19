@@ -1,8 +1,8 @@
 import type { ExecutiveReport } from "@/domain/report";
-import { formatDateBr, periodLabel } from "@/lib/dates";
+import { formatDateBr, periodLabel, periodScopeLabel } from "@/lib/dates";
 import { formatCurrency, formatInteger, formatPercent } from "@/lib/format";
 
-export function MorningReportCard({ report }: { report: ExecutiveReport }) {
+export function ExecutiveReportCard({ report }: { report: ExecutiveReport }) {
   const { metrics, analysis } = report;
   const achievement = metrics.sales.achievementPercentage;
   const achievementClass =
@@ -15,7 +15,9 @@ export function MorningReportCard({ report }: { report: ExecutiveReport }) {
       <div className="relative flex h-full flex-col gap-4">
         <div className="flex items-center justify-between text-[10px] lowercase tracking-[0.22em] text-accent">
           <span>acal intelligence</span>
-          <span>relatório {periodLabel(metrics.period).toLowerCase()}</span>
+          <span>
+            {periodLabel(metrics.period).toLowerCase()} · {periodScopeLabel(metrics.period).toLowerCase()}
+          </span>
         </div>
         <div>
           <h3 className="text-3xl tracking-tight">{metrics.storeName}</h3>
@@ -24,7 +26,10 @@ export function MorningReportCard({ report }: { report: ExecutiveReport }) {
           </p>
         </div>
         <div className="grid grid-cols-3 gap-2">
-          <Kpi label="Vendas" value={formatCurrency(metrics.sales.actual)} />
+          <Kpi
+            label={metrics.period === "AFTERNOON" ? "Vendas parciais" : "Vendas"}
+            value={formatCurrency(metrics.sales.actual)}
+          />
           <Kpi label="Meta" value={formatCurrency(metrics.sales.target)} />
           <Kpi label="Atingimento" value={formatPercent(achievement)} valueClass={achievementClass} />
         </div>
@@ -152,3 +157,5 @@ function Row({
     </div>
   );
 }
+
+export { ExecutiveReportCard as MorningReportCard };

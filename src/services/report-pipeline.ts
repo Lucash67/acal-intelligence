@@ -15,6 +15,7 @@ import { getExecutivePrompt } from "@/services/prompt-engine";
 import { ReportGenerator } from "@/services/report-generator";
 import { renderVisualReport } from "@/services/visual-report-renderer";
 import { validateStoreRawData } from "@/services/raw-data-validator";
+import { buildWhatsAppPreview } from "@/lib/whatsapp-preview";
 
 export type PipelineInput = {
   storeId: string;
@@ -145,10 +146,19 @@ export async function runReportPipeline(input: PipelineInput): Promise<PipelineR
     });
 
     const deliveryStarted = Date.now();
-    const message = await getMessagingProvider().sendText({
+    const previewText = buildWhatsAppPreview(report);
+    const messaging = getMessagingProvider();
+    const message = await messaging.sendText({
       to: store.manager.phone,
-      text: `${report.title}\n${analysis.executiveSummary}`,
+      text: previewText,
     });
+    if (message.ok) {
+      await messaging.sendImage({
+        to: store.manager.phone,
+        imagePath: visual.imagePath ?? undefined,
+        caption: `${report.title} · card 1080×1350`,
+      });
+    }
 
     await createDelivery({
       id: createId(),

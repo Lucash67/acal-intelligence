@@ -17,7 +17,12 @@ export default async function OverviewPage() {
         eyebrow="Visão geral"
         title="Central operacional"
         description="Unidades públicas da Acal. Vendas, metas, gerentes e entregas continuam simulados."
-        action={<RunPipelineButton label="Simular ciclo matinal" />}
+        action={
+          <div className="flex flex-wrap gap-2">
+            <RunPipelineButton period="MORNING" label="Simular ciclo matinal" />
+            <RunPipelineButton period="AFTERNOON" label="Simular ciclo vespertino" />
+          </div>
+        }
       />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">

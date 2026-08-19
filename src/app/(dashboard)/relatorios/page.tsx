@@ -26,7 +26,12 @@ export default async function ReportsPage() {
         eyebrow="Relatórios"
         title="Histórico executivo"
         description="Cada relatório é isolado por loja. Os números oficiais vêm do Analytics Engine."
-        action={<RunPipelineButton storeId="presidente-kennedy" label="Gerar relatório da Presidente Kennedy" />}
+        action={
+          <div className="flex flex-wrap gap-2">
+            <RunPipelineButton storeId="aldeota" period="MORNING" label="Simular matinal Aldeota" />
+            <RunPipelineButton storeId="aldeota" period="AFTERNOON" label="Simular vespertino Aldeota" />
+          </div>
+        }
       />
       <Card className="overflow-x-auto p-0">
         <table className="w-full text-left text-sm">

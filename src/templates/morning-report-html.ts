@@ -1,5 +1,5 @@
 import type { ExecutiveReport } from "@/domain/report";
-import { formatDateBr, periodLabel } from "@/lib/dates";
+import { formatDateBr, periodLabel, periodScopeLabel } from "@/lib/dates";
 import { formatCurrency, formatInteger, formatPercent } from "@/lib/format";
 import { tokens } from "@/lib/tokens";
 
@@ -11,7 +11,7 @@ function escapeHtml(value: string): string {
     .replaceAll('"', "&quot;");
 }
 
-export function renderMorningReportHtml(report: ExecutiveReport): string {
+export function renderExecutiveReportHtml(report: ExecutiveReport): string {
   const { metrics, analysis } = report;
   const period = periodLabel(metrics.period).toUpperCase();
   const achievement = metrics.sales.achievementPercentage;
@@ -147,7 +147,7 @@ export function renderMorningReportHtml(report: ExecutiveReport): string {
     <div class="frame">
       <div class="kicker">
         <span>ACAL Intelligence</span>
-        <span>Relatório ${escapeHtml(period)}</span>
+        <span>Relatório ${escapeHtml(period)} · ${escapeHtml(periodScopeLabel(metrics.period))}</span>
       </div>
       <div>
         <h1>${escapeHtml(metrics.storeName)}</h1>
@@ -155,7 +155,7 @@ export function renderMorningReportHtml(report: ExecutiveReport): string {
       </div>
       <div class="hero">
         <div class="kpi">
-          <span>Vendas</span>
+          <span>${metrics.period === "AFTERNOON" ? "Vendas parciais" : "Vendas"}</span>
           <strong>${formatCurrency(metrics.sales.actual)}</strong>
         </div>
         <div class="kpi">
@@ -204,3 +204,5 @@ export function renderMorningReportHtml(report: ExecutiveReport): string {
   </body>
 </html>`;
 }
+
+export { renderExecutiveReportHtml as renderMorningReportHtml };

@@ -35,6 +35,10 @@ export function periodLabel(period: ReportPeriod): string {
   return period === "MORNING" ? "Matinal" : "Vespertino";
 }
 
+export function periodScopeLabel(period: ReportPeriod): string {
+  return period === "MORNING" ? "Consolidado D-1" : "Parcial do dia";
+}
+
 export function addDays(isoDate: string, days: number): string {
   const date = new Date(`${isoDate}T12:00:00.000Z`);
   date.setUTCDate(date.getUTCDate() + days);
