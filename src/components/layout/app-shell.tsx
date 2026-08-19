@@ -59,7 +59,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [menuOpen]);
 
   return (
-    <div className="min-h-screen bg-bg lg:grid lg:grid-cols-[248px_1fr]">
+    <div className="min-h-screen bg-bg lg:grid lg:grid-cols-[280px_1fr]">
       <header className="sticky top-0 z-40 flex items-center justify-between gap-3 border-b border-border bg-bg/95 px-4 py-3 backdrop-blur lg:hidden">
         <button
           type="button"
@@ -70,7 +70,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         >
           {menuOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
-        <BrandLockup />
+        <BrandLockup size="header" />
         <LogoutLink compact />
       </header>
 

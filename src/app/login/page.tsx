@@ -88,7 +88,7 @@ export default function LoginPage() {
 
       <section className="mx-auto mt-16 max-w-2xl text-center">
         <p className="text-[12px] text-accent">Produto interno</p>
-        <h1 className="mt-3 text-4xl tracking-tight text-text md:text-5xl">
+        <h1 className="mt-3 text-4xl font-semibold tracking-tight text-text md:text-5xl">
           Inteligência executiva para a operação da Acal
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-text-muted">

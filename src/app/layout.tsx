@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { IBM_Plex_Mono, Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-plus-jakarta",
+  variable: "--font-inter",
 });
 
 const ibmPlexMono = IBM_Plex_Mono({
@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
       </head>
-      <body className={`${plusJakarta.variable} ${ibmPlexMono.variable} antialiased`}>
+      <body className={`${inter.variable} ${ibmPlexMono.variable} font-sans antialiased`}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

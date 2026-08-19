@@ -163,7 +163,7 @@
   --color-nav-muted: var(--nav-muted);
   --color-nav-active-bg: var(--nav-active-bg);
   --color-nav-active-text: var(--nav-active-text);
-  --font-sans: var(--font-plus-jakarta);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-ibm-plex-mono);
 }
 
@@ -179,7 +179,7 @@ body {
 }
 
 body {
-  font-family: var(--font-plus-jakarta), sans-serif;
+  font-family: var(--font-inter), "Inter Fallback", ui-sans-serif, system-ui, sans-serif;
   background-image:
     radial-gradient(circle at 12% -10%, var(--glow), transparent 34%),
     linear-gradient(180deg, var(--page-glow) 0%, var(--page-mid) 48%, var(--page-deep) 100%);
