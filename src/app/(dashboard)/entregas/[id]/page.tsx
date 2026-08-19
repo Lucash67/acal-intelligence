@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/layout/page-header";
 import { ExecutiveReportCard } from "@/components/reports/morning-report-card";
 import { WhatsAppDeliveryPreview } from "@/components/reports/whatsapp-delivery-preview";
@@ -7,7 +6,7 @@ import { Badge, statusTone } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { formatDateTimeBr, periodLabel, periodScopeLabel } from "@/lib/dates";
 import { statusLabel } from "@/lib/labels";
-import { getReportByExecutionId, listDeliveries, listStores } from "@/repositories";
+import { getDeliveryById, getReportByExecutionId, listStores } from "@/repositories";
 
 export default async function DeliveryDetailPage({
   params,
@@ -15,9 +14,23 @@ export default async function DeliveryDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [deliveries, stores] = await Promise.all([listDeliveries(), listStores()]);
-  const delivery = deliveries.find((item) => item.id === id);
-  if (!delivery) notFound();
+  const [delivery, stores] = await Promise.all([getDeliveryById(id), listStores()]);
+  if (!delivery) {
+    return (
+      <div>
+        <PageHeader
+          eyebrow="Entrega simulada"
+          title="Disparo indisponível nesta instância"
+          description="No MVP em memória, um link antigo pode não existir depois do deploy. Volte ao histórico de entregas."
+          action={
+            <Link href="/entregas" className="text-sm text-accent">
+              Voltar às entregas
+            </Link>
+          }
+        />
+      </div>
+    );
+  }
 
   const store = stores.find((item) => item.id === delivery.storeId);
   const report = await getReportByExecutionId(delivery.executionId);

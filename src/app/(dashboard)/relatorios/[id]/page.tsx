@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/layout/page-header";
 import { ExecutiveReportCard } from "@/components/reports/morning-report-card";
 import { WhatsAppDeliveryPreview } from "@/components/reports/whatsapp-delivery-preview";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { periodLabel, periodScopeLabel } from "@/lib/dates";
+import { deliveryKey, parseExecutionKey } from "@/lib/demo-keys";
 import { formatCurrency, formatPercent } from "@/lib/format";
-import { getReportById, listDeliveries } from "@/repositories";
+import { getDeliveryById, getReportById } from "@/repositories";
 
 export default async function ReportDetailPage({
   params,
@@ -16,9 +16,26 @@ export default async function ReportDetailPage({
 }) {
   const { id } = await params;
   const report = await getReportById(id);
-  if (!report) notFound();
-  const deliveries = await listDeliveries();
-  const delivery = deliveries.find((item) => item.executionId === report.executionId);
+  if (!report) {
+    return (
+      <div>
+        <PageHeader
+          eyebrow="Visualização"
+          title="Relatório indisponível nesta instância"
+          description="No MVP em memória, um link antigo pode não existir depois do deploy. Abra o histórico e escolha o relatório de novo."
+          action={
+            <Link href="/relatorios" className="text-sm text-accent">
+              Voltar aos relatórios
+            </Link>
+          }
+        />
+      </div>
+    );
+  }
+  const parsed = parseExecutionKey(report.executionId);
+  const delivery = parsed
+    ? await getDeliveryById(deliveryKey(parsed.storeId, parsed.period, parsed.date))
+    : null;
 
   return (
     <div>

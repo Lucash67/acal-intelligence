@@ -1,6 +1,8 @@
 import type { ExecutiveReport } from "@/domain/report";
+import { parseExecutionKey, parseReportKey } from "@/lib/demo-keys";
 import { tryPrisma } from "@/lib/prisma";
 import { getMemoryState, type PersistedReport } from "@/repositories/memory-store";
+import { buildDemoReport } from "@/services/demo-report";
 
 export async function saveReport(report: PersistedReport): Promise<PersistedReport> {
   const saved = await tryPrisma((prisma) =>
@@ -20,7 +22,9 @@ export async function saveReport(report: PersistedReport): Promise<PersistedRepo
   );
   if (saved) return report;
 
-  getMemoryState().reports.unshift(report);
+  const memory = getMemoryState();
+  memory.reports = memory.reports.filter((item) => item.id !== report.id);
+  memory.reports.unshift(report);
   return report;
 }
 
@@ -50,10 +54,20 @@ export async function listReports(): Promise<PersistedReport[]> {
 
 export async function getReportById(id: string): Promise<PersistedReport | null> {
   const reports = await listReports();
-  return reports.find((report) => report.id === id) ?? null;
+  const found = reports.find((report) => report.id === id);
+  if (found) return found;
+
+  const parsed = parseReportKey(id);
+  if (!parsed) return null;
+  return buildDemoReport(parsed.storeId, parsed.period, parsed.date);
 }
 
 export async function getReportByExecutionId(executionId: string): Promise<PersistedReport | null> {
   const reports = await listReports();
-  return reports.find((report) => report.executionId === executionId) ?? null;
+  const found = reports.find((report) => report.executionId === executionId);
+  if (found) return found;
+
+  const parsed = parseExecutionKey(executionId);
+  if (!parsed) return null;
+  return buildDemoReport(parsed.storeId, parsed.period, parsed.date);
 }

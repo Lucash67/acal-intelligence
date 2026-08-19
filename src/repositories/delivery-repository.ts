@@ -1,5 +1,7 @@
 import type { ReportDelivery } from "@/domain/delivery";
+import { deliveryKey, executionKey, parseDeliveryKey } from "@/lib/demo-keys";
 import { tryPrisma } from "@/lib/prisma";
+import { getMockStore } from "@/mocks/stores";
 import { getMemoryState } from "@/repositories/memory-store";
 
 function mapDelivery(
@@ -64,6 +66,32 @@ export async function createDelivery(delivery: ReportDelivery): Promise<ReportDe
   );
   if (saved) return delivery;
 
-  getMemoryState().deliveries.unshift(delivery);
+  const memory = getMemoryState();
+  memory.deliveries = memory.deliveries.filter((item) => item.id !== delivery.id);
+  memory.deliveries.unshift(delivery);
   return delivery;
+}
+
+export async function getDeliveryById(id: string): Promise<ReportDelivery | null> {
+  const deliveries = await listDeliveries();
+  const found = deliveries.find((item) => item.id === id);
+  if (found) return found;
+
+  const parsed = parseDeliveryKey(id);
+  if (!parsed) return null;
+  const store = getMockStore(parsed.storeId);
+  if (!store) return null;
+
+  return {
+    id: deliveryKey(parsed.storeId, parsed.period, parsed.date),
+    executionId: executionKey(parsed.storeId, parsed.period, parsed.date),
+    storeId: parsed.storeId,
+    channel: "WHATSAPP",
+    recipient: store.manager.phone,
+    status: "SUCCESS",
+    attempts: 1,
+    sentAt: `${parsed.date}T16:00:00.000Z`,
+    error: null,
+    createdAt: `${parsed.date}T16:00:00.000Z`,
+  };
 }

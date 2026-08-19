@@ -1,6 +1,7 @@
 import type { ReportPeriod } from "@/domain/period";
 import type { PipelineStage } from "@/domain/log";
 import { createId } from "@/lib/ids";
+import { deliveryKey, executionKey, reportKey } from "@/lib/demo-keys";
 import { getAIProvider } from "@/providers/ai";
 import { getDataSourceProvider } from "@/providers/data-source";
 import { getMessagingProvider } from "@/providers/messaging";
@@ -54,7 +55,7 @@ async function logStage(input: {
 }
 
 export async function runReportPipeline(input: PipelineInput): Promise<PipelineResult> {
-  const executionId = createId();
+  const executionId = executionKey(input.storeId, input.period, input.referenceDate);
   const startedAt = new Date().toISOString();
 
   await createExecution({
@@ -129,7 +130,11 @@ export async function runReportPipeline(input: PipelineInput): Promise<PipelineR
     });
 
     const reportStarted = Date.now();
-    const report = new ReportGenerator().generate(metrics, analysis);
+    const report = new ReportGenerator().generate(
+      metrics,
+      analysis,
+      reportKey(input.storeId, input.period, input.referenceDate),
+    );
     const visual = await renderVisualReport(report);
     await saveReport({
       ...report,
@@ -161,7 +166,7 @@ export async function runReportPipeline(input: PipelineInput): Promise<PipelineR
     }
 
     await createDelivery({
-      id: createId(),
+      id: deliveryKey(input.storeId, input.period, input.referenceDate),
       executionId,
       storeId: input.storeId,
       channel: "WHATSAPP",

@@ -5,9 +5,9 @@ import { periodLabel } from "@/lib/dates";
 import { createId } from "@/lib/ids";
 
 export class ReportGenerator {
-  generate(metrics: StoreMetrics, analysis: AIAnalysis): ExecutiveReport {
+  generate(metrics: StoreMetrics, analysis: AIAnalysis, id = createId()): ExecutiveReport {
     return {
-      id: createId(),
+      id,
       storeId: metrics.storeId,
       storeName: metrics.storeName,
       managerName: metrics.managerName,

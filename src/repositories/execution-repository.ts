@@ -70,7 +70,9 @@ export async function createExecution(input: ReportExecution): Promise<ReportExe
   );
   if (row) return mapExecution(row);
 
-  getMemoryState().executions.unshift(input);
+  const memory = getMemoryState();
+  memory.executions = memory.executions.filter((item) => item.id !== input.id);
+  memory.executions.unshift(input);
   return input;
 }
 

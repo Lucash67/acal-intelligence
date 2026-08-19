@@ -5,6 +5,7 @@ import type { ExecutiveReport } from "@/domain/report";
 import type { StoreProfile } from "@/domain/store";
 import { addDays, toIsoDate } from "@/lib/dates";
 import { createId } from "@/lib/ids";
+import { deliveryKey, executionKey, reportKey } from "@/lib/demo-keys";
 import { getMockStoreRawData } from "@/mocks/raw-data";
 import { MOCK_STORES } from "@/mocks/stores";
 import { buildMockAnalysis } from "@/providers/ai/mock-ai-provider";
@@ -27,7 +28,7 @@ type MemoryState = {
   seeded: boolean;
 };
 
-const CATALOG_VERSION = 3;
+const CATALOG_VERSION = 4;
 const globalMemory = globalThis as unknown as { acalMemory?: MemoryState };
 
 function emptyState(): MemoryState {
@@ -78,7 +79,7 @@ function seedMemoryHistory(current: MemoryState) {
   for (const row of sample) {
     const startedAt = new Date(`${row.date}T${row.period === "MORNING" ? "06:41:00" : "13:38:00"}.000Z`);
     const finishedAt = new Date(startedAt.getTime() + 42_000);
-    const executionId = createId();
+    const executionId = executionKey(row.storeId, row.period, row.date);
     const store = current.stores.find((item) => item.id === row.storeId);
     if (!store) continue;
 
@@ -119,7 +120,7 @@ function seedMemoryHistory(current: MemoryState) {
         message: "Pipeline interrompido nesta loja.",
       });
       current.deliveries.push({
-        id: createId(),
+        id: deliveryKey(row.storeId, row.period, row.date),
         executionId,
         storeId: row.storeId,
         channel: "WHATSAPP",
@@ -135,7 +136,11 @@ function seedMemoryHistory(current: MemoryState) {
 
     const raw = getMockStoreRawData(row.storeId, row.period, row.date);
     const metrics = computeStoreMetrics(raw);
-    const report = generator.generate(metrics, buildMockAnalysis(metrics));
+    const report = generator.generate(
+      metrics,
+      buildMockAnalysis(metrics),
+      reportKey(row.storeId, row.period, row.date),
+    );
 
     current.reports.push({
       ...report,
@@ -143,7 +148,7 @@ function seedMemoryHistory(current: MemoryState) {
       visualHtml: renderExecutiveReportHtml(report),
     });
     current.deliveries.push({
-      id: createId(),
+      id: deliveryKey(row.storeId, row.period, row.date),
       executionId,
       storeId: row.storeId,
       channel: "WHATSAPP",
