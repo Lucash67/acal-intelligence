@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
-import { BrandLogo } from "@/components/brand/brand-logo";
+import { BrandLockup } from "@/components/brand/brand-lockup";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 
 function LoginForm() {
@@ -41,31 +41,31 @@ function LoginForm() {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <label className="block space-y-1.5">
-        <span className="text-[11px] uppercase tracking-[0.16em] text-text-muted">Usuário</span>
+        <span className="text-sm text-text-muted">Usuário</span>
         <input
           name="username"
           autoComplete="username"
           value={username}
           onChange={(event) => setUsername(event.target.value)}
-          className="w-full rounded-[var(--radius-sm)] border border-border bg-bg-card px-3 py-2.5 text-sm text-text outline-none focus:border-border-strong"
+          className="w-full rounded-xl border border-border bg-bg px-3 py-3 text-sm text-text outline-none focus:border-border-strong"
         />
       </label>
       <label className="block space-y-1.5">
-        <span className="text-[11px] uppercase tracking-[0.16em] text-text-muted">Senha</span>
+        <span className="text-sm text-text-muted">Senha</span>
         <input
           name="password"
           type="password"
           autoComplete="current-password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          className="w-full rounded-[var(--radius-sm)] border border-border bg-bg-card px-3 py-2.5 text-sm text-text outline-none focus:border-border-strong"
+          className="w-full rounded-xl border border-border bg-bg px-3 py-3 text-sm text-text outline-none focus:border-border-strong"
         />
       </label>
       {error ? <p className="text-sm text-danger">{error}</p> : null}
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-[var(--radius-sm)] border border-accent/40 bg-accent-dim px-4 py-2.5 text-sm text-accent-strong transition hover:border-accent disabled:opacity-60"
+        className="w-full rounded-xl bg-[var(--acal-primary)] px-4 py-3 text-sm font-medium text-white transition hover:bg-[var(--acal-primary-dark)] disabled:opacity-60"
       >
         {loading ? "Entrando..." : "Entrar →"}
       </button>
@@ -75,33 +75,29 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <main className="min-h-screen px-6 py-6 md:px-10">
+    <main className="min-h-screen px-5 py-5 md:px-10">
       <header className="mx-auto flex max-w-5xl items-center justify-between gap-4">
-        <div>
-          <BrandLogo size="login" />
-          <p className="mt-2 text-[18px] font-medium lowercase tracking-[0.16em] text-text">intelligence</p>
-        </div>
+        <BrandLockup size="login" />
         <div className="flex flex-col items-end gap-3">
-          <span className="rounded-full border border-border bg-bg-card px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-text-muted">
+          <span className="rounded-full bg-bg-card px-3 py-1 text-[12px] text-text-muted">
             Ambiente simulado
           </span>
           <ThemeSwitcher compact surface="page" />
         </div>
       </header>
 
-      <section className="mx-auto mt-14 max-w-2xl text-center">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-accent">Produto interno</p>
-        <h1 className="mt-3 text-3xl tracking-tight text-text md:text-4xl">
+      <section className="mx-auto mt-16 max-w-2xl text-center">
+        <p className="text-[12px] text-accent">Produto interno</p>
+        <h1 className="mt-3 text-4xl tracking-tight text-text md:text-5xl">
           Inteligência executiva para a operação da Acal
         </h1>
-        <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-text-muted">
+        <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-text-muted">
           A estrutura da rede é pública. Vendas, metas, gerentes e entregas continuam simulados para
           demonstração.
         </p>
       </section>
 
-      <div className="mx-auto mt-10 w-full max-w-md rounded-[var(--radius-md)] border border-border bg-bg-card p-8 shadow-[var(--shadow-card)]">
-        <p className="mb-5 text-sm text-text-muted">Informe usuário e senha para entrar.</p>
+      <div className="mx-auto mt-10 w-full max-w-[440px] rounded-2xl bg-bg-card p-7 shadow-[var(--shadow-card)]">
         <Suspense fallback={<p className="text-sm text-text-muted">Carregando...</p>}>
           <LoginForm />
         </Suspense>

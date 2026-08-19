@@ -31,11 +31,11 @@ export function ThemeSwitcher({
                 "grid h-8 w-8 place-items-center rounded-full transition",
                 surface === "page"
                   ? active
-                    ? "bg-accent text-bg-card"
+                    ? "bg-[var(--acal-primary)] text-white"
                     : "text-text-muted hover:bg-bg-hover hover:text-text"
                   : active
-                    ? "bg-nav-text text-[var(--background-secondary)] shadow-sm"
-                    : "text-nav-muted hover:bg-nav-active-bg hover:text-nav-text",
+                    ? "bg-white text-[var(--sidebar)]"
+                    : "text-[var(--sidebar-muted)] hover:bg-[var(--sidebar-hover)] hover:text-white",
               )}
             >
               <ThemeIcon id={option.id} className="h-4 w-4" />

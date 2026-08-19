@@ -47,6 +47,10 @@
   --nav-muted: rgba(255, 255, 255, 0.78);
   --nav-active-bg: rgba(255, 255, 255, 0.2);
   --nav-active-text: #ffffff;
+  --sidebar: #061018;
+  --sidebar-hover: #0c1c28;
+  --sidebar-text: #d5e6ef;
+  --sidebar-muted: #7a93a3;
 }
 
 [data-theme="dark"] {
@@ -86,6 +90,10 @@
   --nav-muted: #8ea3b3;
   --nav-active-bg: rgba(0, 156, 224, 0.14);
   --nav-active-text: #4db8e8;
+  --sidebar: #061018;
+  --sidebar-hover: #0c1c28;
+  --sidebar-text: #d5e6ef;
+  --sidebar-muted: #7a93a3;
 }
 
 [data-theme="light"] {
@@ -125,6 +133,10 @@
   --nav-muted: #5b7382;
   --nav-active-bg: rgba(0, 156, 224, 0.1);
   --nav-active-text: #0077ab;
+  --sidebar: #061018;
+  --sidebar-hover: #0c1c28;
+  --sidebar-text: #d5e6ef;
+  --sidebar-muted: #7a93a3;
 }
 
 @theme inline {
