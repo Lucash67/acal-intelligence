@@ -28,8 +28,8 @@ export default function AutomationsPage() {
             </div>
             <p className="mb-5 text-sm text-text-muted">{schedule.description}</p>
             <div className="mb-5 flex items-center gap-2">
-              <Badge tone="warning">Scheduler inativo</Badge>
-              <Badge>Abstração pronta</Badge>
+              <Badge tone="warning">Agendamento inativo</Badge>
+              <Badge>Estrutura pronta</Badge>
             </div>
             <RunPipelineButton period={schedule.period} label={`Simular ${schedule.name.toLowerCase()}`} />
           </Card>

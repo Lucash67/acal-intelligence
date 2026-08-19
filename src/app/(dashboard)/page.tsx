@@ -4,7 +4,8 @@ import { RunPipelineButton } from "@/components/pipeline/run-pipeline-button";
 import { Badge, statusTone } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Stat } from "@/components/ui/stat";
-import { formatDateTimeBr } from "@/lib/dates";
+import { formatDateTimeBr, periodLabel } from "@/lib/dates";
+import { statusLabel } from "@/lib/labels";
 import { getOverviewData } from "@/services/dashboard-data";
 
 export default async function OverviewPage() {
@@ -13,9 +14,9 @@ export default async function OverviewPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Overview"
+        eyebrow="Visão geral"
         title="Central operacional"
-        description="Shell com unidades públicas da Acal. Vendas, metas, gerentes e entregas continuam simulados."
+        description="Unidades públicas da Acal. Vendas, metas, gerentes e entregas continuam simulados."
         action={<RunPipelineButton label="Simular ciclo matinal" />}
       />
 
@@ -42,9 +43,9 @@ export default async function OverviewPage() {
         <Card>
           <CardTitle>Status do sistema</CardTitle>
           <div className="space-y-3 text-sm">
-            <Row label="Modo" value={data.mockMode ? "Estrutura real · dados simulados" : "LIVE"} />
+            <Row label="Modo" value={data.mockMode ? "Estrutura real · dados simulados" : "Em operação"} />
             <Row label="Persistência" value={data.database ? "Supabase / PostgreSQL" : "Memória local"} />
-            <Row label="IA" value={`${data.aiUsage} análises registradas`} />
+            <Row label="Inteligência" value={`${data.aiUsage} análises registradas`} />
             <Row label="Saúde" value={data.systemStatus} />
           </div>
         </Card>
@@ -66,9 +67,9 @@ export default async function OverviewPage() {
                     <td className="py-3">
                       {data.stores.find((store) => store.id === execution.storeId)?.name ?? execution.storeId}
                     </td>
-                    <td className="py-3 text-text-muted">{execution.reportType}</td>
+                    <td className="py-3 text-text-muted">{periodLabel(execution.reportType)}</td>
                     <td className="py-3">
-                      <Badge tone={statusTone(execution.status)}>{execution.status}</Badge>
+                      <Badge tone={statusTone(execution.status)}>{statusLabel(execution.status)}</Badge>
                     </td>
                     <td className="py-3 text-text-muted">{formatDateTimeBr(execution.startedAt)}</td>
                   </tr>

@@ -5,7 +5,13 @@ import { useTheme } from "@/components/theme/theme-provider";
 import { cn } from "@/lib/cn";
 import { THEME_OPTIONS } from "@/lib/theme";
 
-export function ThemeSwitcher({ compact = false }: { compact?: boolean }) {
+export function ThemeSwitcher({
+  compact = false,
+  surface = "sidebar",
+}: {
+  compact?: boolean;
+  surface?: "sidebar" | "page";
+}) {
   const { theme, setTheme } = useTheme();
 
   if (compact) {
@@ -23,9 +29,13 @@ export function ThemeSwitcher({ compact = false }: { compact?: boolean }) {
               onClick={() => setTheme(option.id)}
               className={cn(
                 "grid h-8 w-8 place-items-center rounded-full transition",
-                active
-                  ? "bg-nav-text text-[var(--background-secondary)] shadow-sm"
-                  : "text-nav-muted hover:bg-nav-active-bg hover:text-nav-text",
+                surface === "page"
+                  ? active
+                    ? "bg-accent text-bg-card"
+                    : "text-text-muted hover:bg-bg-hover hover:text-text"
+                  : active
+                    ? "bg-nav-text text-[var(--background-secondary)] shadow-sm"
+                    : "text-nav-muted hover:bg-nav-active-bg hover:text-nav-text",
               )}
             >
               <ThemeIcon id={option.id} className="h-4 w-4" />

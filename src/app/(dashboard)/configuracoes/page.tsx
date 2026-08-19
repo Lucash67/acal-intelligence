@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
+import { providerLabel } from "@/lib/labels";
 import { ORGANIZATION_PROFILE } from "@/mocks/organization";
 import { getRuntimeConfig } from "@/services/dashboard-data";
 
@@ -27,7 +28,10 @@ export default function SettingsPage() {
             <Row label="SAC" value={ORGANIZATION_PROFILE.phones.sac} />
             <Row label="Central de vendas" value={ORGANIZATION_PROFILE.phones.sales} />
             <Row label="Para empresas" value={ORGANIZATION_PROFILE.phones.companies} />
-            <Row label="Produto" value={`${ORGANIZATION_PROFILE.productName} (${ORGANIZATION_PROFILE.productNameStatus})`} />
+            <Row
+              label="Produto"
+              value={`${ORGANIZATION_PROFILE.productName} (${ORGANIZATION_PROFILE.productNameStatus === "WORKING_TITLE" ? "nome provisório" : ORGANIZATION_PROFILE.productNameStatus})`}
+            />
           </dl>
           <div className="mt-5 flex flex-wrap gap-2">
             <Badge tone="success">Público confirmado</Badge>
@@ -37,10 +41,10 @@ export default function SettingsPage() {
         <Card>
           <CardTitle>Provedores ativos</CardTitle>
           <dl className="space-y-3 text-sm">
-            <Row label="Data source" value={config.dataSourceProvider} />
-            <Row label="IA" value={config.aiProvider} />
-            <Row label="Mensageria" value={config.messagingProvider} />
-            <Row label="Mock mode" value={config.mockMode ? "ativo" : "off"} />
+            <Row label="Fonte de dados" value={providerLabel(config.dataSourceProvider)} />
+            <Row label="Inteligência" value={providerLabel(config.aiProvider)} />
+            <Row label="Mensagens" value={providerLabel(config.messagingProvider)} />
+            <Row label="Modo simulado" value={config.mockMode ? "Ativo" : "Desligado"} />
           </dl>
         </Card>
         <Card>
@@ -54,7 +58,7 @@ export default function SettingsPage() {
             <Line
               label="OpenAI"
               ok={config.openaiConfigured}
-              detail={config.openaiConfigured ? "OPENAI_API_KEY detectada" : "Ausente — MockAIProvider"}
+              detail={config.openaiConfigured ? "OPENAI_API_KEY detectada" : "Ausente — provedor simulado"}
             />
             <Line label="Z-API" ok={false} detail="Desabilitado nesta fase" />
           </div>
@@ -89,11 +93,11 @@ export default function SettingsPage() {
             predominante; o navy fica reservado ao tema escuro.
           </p>
           <div className="mb-4 flex flex-wrap gap-3">
-            <Swatch name="primary" value="#009CE0" className="bg-acal-primary" />
-            <Swatch name="primary light" value="#4DB8E8" className="bg-acal-primary-light" />
-            <Swatch name="primary dark" value="#0077AB" className="bg-acal-primary-dark" />
-            <Swatch name="background" value="tema ativo" className="bg-bg" />
-            <Swatch name="surface" value="tema ativo" className="bg-bg-card" />
+            <Swatch name="principal" value="#009CE0" className="bg-acal-primary" />
+            <Swatch name="principal clara" value="#4DB8E8" className="bg-acal-primary-light" />
+            <Swatch name="principal escura" value="#0077AB" className="bg-acal-primary-dark" />
+            <Swatch name="fundo" value="tema ativo" className="bg-bg" />
+            <Swatch name="superfície" value="tema ativo" className="bg-bg-card" />
           </div>
           <div className="flex gap-2">
             <Badge tone="warning">TODO(ACAL-BRAND)</Badge>
@@ -131,7 +135,7 @@ function Line({ label, ok, detail }: { label: string; ok: boolean; detail: strin
         <p>{label}</p>
         <p className="mt-1 text-text-muted">{detail}</p>
       </div>
-      <Badge tone={ok ? "success" : "warning"}>{ok ? "OK" : "OFF"}</Badge>
+      <Badge tone={ok ? "success" : "warning"}>{ok ? "Pronto" : "Desligado"}</Badge>
     </div>
   );
 }

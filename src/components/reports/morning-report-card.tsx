@@ -29,7 +29,7 @@ export function MorningReportCard({ report }: { report: ExecutiveReport }) {
           <Kpi label="Atingimento" value={formatPercent(achievement)} valueClass={achievementClass} />
         </div>
         <div className="grid grid-cols-2 gap-2">
-          <Panel title="Performance">
+          <Panel title="Desempenho">
             {metrics.consultants.topPerformers.map((item, index) => (
               <Row
                 key={item.id}

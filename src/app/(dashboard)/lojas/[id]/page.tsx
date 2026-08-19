@@ -7,7 +7,8 @@ import { Badge, statusTone } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { provenanceLabel, unitTypeLabel } from "@/domain/provenance";
 import { isReportableStore } from "@/domain/store";
-import { toIsoDate } from "@/lib/dates";
+import { periodLabel, toIsoDate } from "@/lib/dates";
+import { statusLabel } from "@/lib/labels";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import { getMockStoreRawData } from "@/mocks/raw-data";
 import { listExecutions, getStoreById } from "@/repositories";
@@ -44,7 +45,7 @@ export default async function StoreDetailPage({
         action={reportable ? <RunPipelineButton storeId={store.id} label="Simular esta loja" /> : undefined}
       />
       <div className="mb-6 flex flex-wrap gap-2">
-        <Badge tone={statusTone(store.status)}>{store.status}</Badge>
+        <Badge tone={statusTone(store.status)}>{statusLabel(store.status)}</Badge>
         <Badge tone={statusTone(store.sourceStatus)}>{provenanceLabel(store.sourceStatus)}</Badge>
         <Badge>{unitTypeLabel(store.unitType)}</Badge>
         <Badge tone={reportable ? "info" : "neutral"}>{reportable ? "Relatório simulado" : "Fora do fluxo"}</Badge>
@@ -101,8 +102,8 @@ export default async function StoreDetailPage({
                 ) : (
                   executions.slice(0, 8).map((execution) => (
                     <div key={execution.id} className="flex items-center justify-between gap-3 text-sm">
-                      <span className="text-text-muted">{execution.reportType}</span>
-                      <Badge tone={statusTone(execution.status)}>{execution.status}</Badge>
+                      <span className="text-text-muted">{periodLabel(execution.reportType)}</span>
+                      <Badge tone={statusTone(execution.status)}>{statusLabel(execution.status)}</Badge>
                     </div>
                   ))
                 )}

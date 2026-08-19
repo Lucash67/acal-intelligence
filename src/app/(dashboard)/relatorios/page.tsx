@@ -4,6 +4,7 @@ import { RunPipelineButton } from "@/components/pipeline/run-pipeline-button";
 import { Badge, statusTone } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { formatDateBr, formatTimeBr, periodLabel } from "@/lib/dates";
+import { statusLabel } from "@/lib/labels";
 import { listExecutions, listReports, listStores } from "@/repositories";
 
 export default async function ReportsPage() {
@@ -47,7 +48,7 @@ export default async function ReportsPage() {
                 <td className="px-5 py-4 text-text-muted">{formatDateBr(report.referenceDate)}</td>
                 <td className="px-5 py-4">
                   <Badge tone={statusTone(execution?.status ?? "SUCCESS")}>
-                    {execution?.status ?? "SUCCESS"}
+                    {statusLabel(execution?.status ?? "SUCCESS")}
                   </Badge>
                 </td>
                 <td className="px-5 py-4 text-text-muted">{formatTimeBr(report.generatedAt)}</td>

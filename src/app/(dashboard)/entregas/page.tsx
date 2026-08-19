@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Badge, statusTone } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { formatDateTimeBr } from "@/lib/dates";
+import { statusLabel } from "@/lib/labels";
 import { listDeliveries, listStores } from "@/repositories";
 
 export default async function DeliveriesPage() {
@@ -33,13 +34,13 @@ export default async function DeliveriesPage() {
                 <tr key={delivery.id} className="border-t border-border">
                   <td className="px-5 py-4">{store?.name ?? delivery.storeId}</td>
                   <td className="px-5 py-4 text-text-muted">{delivery.recipient}</td>
-                  <td className="px-5 py-4">{delivery.channel}</td>
+                  <td className="px-5 py-4">{statusLabel(delivery.channel)}</td>
                   <td className="px-5 py-4 text-text-muted">
                     {delivery.sentAt ? formatDateTimeBr(delivery.sentAt) : "—"}
                   </td>
                   <td className="px-5 py-4">{delivery.attempts}</td>
                   <td className="px-5 py-4">
-                    <Badge tone={statusTone(delivery.status)}>{delivery.status}</Badge>
+                    <Badge tone={statusTone(delivery.status)}>{statusLabel(delivery.status)}</Badge>
                   </td>
                 </tr>
               );

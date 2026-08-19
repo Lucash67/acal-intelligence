@@ -7,6 +7,7 @@ import { formatCurrency } from "@/lib/format";
 import { listExecutions, listStores } from "@/repositories";
 import { getNextScheduledRun } from "@/jobs/schedules";
 import { formatDateTimeBr } from "@/lib/dates";
+import { statusLabel } from "@/lib/labels";
 
 export default async function StoresPage() {
   const [stores, executions] = await Promise.all([listStores(), listExecutions()]);
@@ -35,7 +36,7 @@ export default async function StoresPage() {
                     </p>
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                    <Badge tone={statusTone(store.status)}>{store.status}</Badge>
+                    <Badge tone={statusTone(store.status)}>{statusLabel(store.status)}</Badge>
                     <Badge tone={statusTone(store.sourceStatus)}>{provenanceLabel(store.sourceStatus)}</Badge>
                   </div>
                 </div>
@@ -66,7 +67,7 @@ export default async function StoresPage() {
                   ) : null}
                   <div className="flex justify-between gap-4">
                     <dt className="text-text-muted">Última execução</dt>
-                    <dd>{last ? last.status : "—"}</dd>
+                    <dd>{last ? statusLabel(last.status) : "—"}</dd>
                   </div>
                   {store.reportEnabled ? (
                     <div className="flex justify-between gap-4">

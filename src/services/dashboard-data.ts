@@ -34,7 +34,7 @@ export async function getOverviewData() {
     deliveriesToday: todayDeliveries.length,
     failures,
     aiUsage,
-    systemStatus: "ESTRUTURA PÚBLICA • DADOS SIMULADOS",
+    systemStatus: "Estrutura pública · dados simulados",
     mockMode: isMockMode(),
     database: isDatabaseConfigured(),
   };

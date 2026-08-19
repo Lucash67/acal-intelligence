@@ -18,7 +18,7 @@ export default async function ReportDetailPage({
   return (
     <div>
       <PageHeader
-        eyebrow="Preview"
+        eyebrow="Visualização"
         title={report.title}
         description="Card executivo 1080×1350 preparado para WhatsApp. Os valores oficiais não vêm do texto da IA."
         action={

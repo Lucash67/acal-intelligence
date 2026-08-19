@@ -169,7 +169,7 @@ export function renderMorningReportHtml(report: ExecutiveReport): string {
       </div>
       <div class="grid">
         <section class="panel">
-          <h2>Performance</h2>
+          <h2>Desempenho</h2>
           ${performers}
         </section>
         <section class="panel">
