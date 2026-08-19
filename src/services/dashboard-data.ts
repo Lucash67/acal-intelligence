@@ -3,7 +3,7 @@ import { getNextScheduledRun } from "@/jobs/schedules";
 import { env, isDatabaseConfigured, isMockMode, isOpenAiConfigured } from "@/lib/env";
 import { listDeliveries, listExecutions, listLogs, listReports, listStores } from "@/repositories";
 import { computeStoreMetrics } from "@/services/analytics-engine";
-import { isReportableStore } from "@/domain/store";
+import { isReportableStore, projectMonthly } from "@/domain/store";
 import { getMockStoreRawData } from "@/mocks/raw-data";
 
 export async function getOverviewData() {
@@ -49,6 +49,8 @@ export async function getIndicators() {
     return {
       store,
       metrics,
+      monthlySales: projectMonthly(store, metrics.sales.actual),
+      monthlyTarget: store.monthlyTarget,
     };
   });
 }

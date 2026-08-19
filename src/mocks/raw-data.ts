@@ -10,6 +10,20 @@ type StoreScenario = {
   inventory: InventoryRawItem[];
 };
 
+const CONSULTANT_BASELINE_DAILY: Record<string, number> = {
+  "presidente-kennedy": 22000,
+  aldeota: 28000,
+  messejana: 20000,
+  parangaba: 19000,
+  centro: 18000,
+  "conceito-aldeota": 16000,
+  "parque-soledade": 15000,
+  "maracanau-almir-pinto": 17000,
+  "sobral-junco": 12000,
+  "aracati-campo-verde": 11000,
+  limoeiro: 10000,
+};
+
 const SCENARIOS: Record<string, StoreScenario> = {
   "presidente-kennedy": {
     salesFactor: 1.18,
@@ -224,6 +238,7 @@ export function getMockStoreRawData(
   }
 
   const periodFactor = period === "AFTERNOON" ? 0.62 : 1;
+  const consultantScale = store.dailyTarget / (CONSULTANT_BASELINE_DAILY[storeId] ?? store.dailyTarget);
 
   return {
     storeId: store.id,
@@ -239,7 +254,8 @@ export function getMockStoreRawData(
     },
     consultants: scenario.consultants.map((consultantRow) => ({
       ...consultantRow,
-      sales: Math.round(consultantRow.sales * periodFactor),
+      sales: Math.round(consultantRow.sales * consultantScale * periodFactor),
+      target: Math.round(consultantRow.target * consultantScale),
     })),
     inventory: scenario.inventory,
     customers: {

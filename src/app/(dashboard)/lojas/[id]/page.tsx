@@ -78,13 +78,17 @@ export default async function StoreDetailPage({
       ) : null}
       {metrics && preview ? (
         <>
-          <div className="mb-6 grid gap-4 md:grid-cols-3">
+          <div className="mb-6 grid gap-4 md:grid-cols-4">
             <Card>
-              <CardTitle>Meta simulada</CardTitle>
+              <CardTitle>Meta mensal simulada</CardTitle>
+              <p className="number text-3xl">{formatCurrency(store.monthlyTarget)}</p>
+            </Card>
+            <Card>
+              <CardTitle>Meta diária simulada</CardTitle>
               <p className="number text-3xl">{formatCurrency(store.dailyTarget)}</p>
             </Card>
             <Card>
-              <CardTitle>Vendas simuladas</CardTitle>
+              <CardTitle>Vendas D-1 simuladas</CardTitle>
               <p className="number text-3xl">{formatCurrency(metrics.sales.actual)}</p>
             </Card>
             <Card>

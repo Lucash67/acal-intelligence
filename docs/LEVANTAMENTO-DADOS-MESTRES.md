@@ -84,12 +84,12 @@ Entregar como planilha: `codigo | nome | cidade | uf | status | codigo_erp | cod
 
 | # | Dado | Observação | Status |
 | --- | --- | --- | --- |
-| 4.1 | Meta diária da loja | Relatório matinal/vespertino | |
+| 4.1 | Meta diária da loja | Relatório matinal/vespertino | MOCK provisório — derivada da meta mensal / dias de venda. Âncora Aldeota ~R$ 500–600 mil/mês (interno). Sem ERP/BI. |
 | 4.2 | A meta matinal usa D-1 ou outro recorte? | Confirmar o spec atual | |
 | 4.3 | A meta vespertina é do dia em curso? | Confirmar | |
 | 4.4 | Meta muda em sábado, domingo e feriado? | |
 | 4.5 | Quem cadastra/atualiza meta | Comercial / controladoria | |
-| 4.6 | Existem metas semanais/mensais oficiais? | Mapear; não implementar agora | |
+| 4.6 | Existem metas semanais/mensais oficiais? | Mapear; mock mensal já existe só para demo | MOCK — restante da rede escalonado por porte público; oficial INTERNAL_PENDING |
 | 4.7 | Campanhas vigentes que alteram leitura | Só se a Acal quiser no relatório | |
 
 ---

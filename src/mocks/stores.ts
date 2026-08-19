@@ -4,13 +4,37 @@ function manager(id: string, name: string, phone: string): ManagerProfile {
   return { id, name, phone, provenance: "MOCK" };
 }
 
+function targets(monthly: number, sellingDays: number) {
+  return {
+    monthlyTarget: monthly,
+    sellingDays,
+    dailyTarget: Math.round(monthly / sellingDays),
+  };
+}
+
 function commercial(
-  partial: Omit<StoreProfile, "state" | "timezone" | "erpCode" | "biCode" | "sourceStatus" | "status" | "notes"> & {
+  partial: Omit<
+    StoreProfile,
+    | "state"
+    | "timezone"
+    | "erpCode"
+    | "biCode"
+    | "sourceStatus"
+    | "status"
+    | "notes"
+    | "monthlyTarget"
+    | "sellingDays"
+    | "dailyTarget"
+  > & {
     notes?: string | null;
+    monthly: number;
+    sellingDays: number;
   },
 ): StoreProfile {
+  const { monthly, sellingDays, ...rest } = partial;
   return {
-    ...partial,
+    ...rest,
+    ...targets(monthly, sellingDays),
     state: "CE",
     timezone: "America/Fortaleza",
     status: "ACTIVE",
@@ -21,6 +45,13 @@ function commercial(
   };
 }
 
+/**
+ * Metas mensais são MOCK, na ordem de grandeza de home center cearense.
+ * Âncora: Aldeota ~R$ 500–600 mil/mês (informação interna de operação, sem ERP/BI).
+ * Demais lojas: escalonadas por porte público (m², horário, capital vs interior).
+ * Projeções de imprensa (ex.: R$ 24–30 mi/ano em Maracanaú) não entram como fato.
+ * Relatório matinal continua em meta diária = mensal / dias de venda.
+ */
 export const MOCK_STORES: StoreProfile[] = [
   commercial({
     id: "presidente-kennedy",
@@ -32,7 +63,8 @@ export const MOCK_STORES: StoreProfile[] = [
     publicHours: "Seg–Sex 8h–20h; Sáb 8h–15h; Dom fechada",
     unitType: "STORE",
     reportEnabled: true,
-    dailyTarget: 22000,
+    monthly: 470000,
+    sellingDays: 24,
     manager: manager("mgr-pk", "Helena Duarte", "+55 85 99101-0101"),
   }),
   commercial({
@@ -45,7 +77,10 @@ export const MOCK_STORES: StoreProfile[] = [
     publicHours: "Seg–Sex 8h–20h; Sáb 8h–15h; Dom 8h–14h",
     unitType: "STORE",
     reportEnabled: true,
-    dailyTarget: 28000,
+    monthly: 550000,
+    sellingDays: 26,
+    notes:
+      "Âncora MOCK de faturamento: ordem de grandeza informada internamente (~R$ 500–600 mil/mês). Não é extração de ERP/BI. Demais lojas foram escaladas por porte público (m², horário, interior vs capital).",
     manager: manager("mgr-aldeota", "Rafael Moura", "+55 85 99102-0202"),
   }),
   commercial({
@@ -58,7 +93,8 @@ export const MOCK_STORES: StoreProfile[] = [
     publicHours: "Seg–Sex 8h–20h; Sáb 8h–15h; Dom fechada",
     unitType: "STORE",
     reportEnabled: true,
-    dailyTarget: 20000,
+    monthly: 420000,
+    sellingDays: 24,
     manager: manager("mgr-messejana", "Marina Costa", "+55 85 99103-0303"),
   }),
   commercial({
@@ -71,7 +107,8 @@ export const MOCK_STORES: StoreProfile[] = [
     publicHours: "Seg–Sex 8h–19h; Sáb 8h–15h; Dom 8h–14h",
     unitType: "STORE",
     reportEnabled: true,
-    dailyTarget: 19000,
+    monthly: 400000,
+    sellingDays: 26,
     manager: manager("mgr-parangaba", "Paulo Mendes", "+55 85 99104-0404"),
   }),
   commercial({
@@ -84,7 +121,9 @@ export const MOCK_STORES: StoreProfile[] = [
     publicHours: "Seg–Sex 8h–18h; Sáb 8h–15h; Dom fechada",
     unitType: "STORE",
     reportEnabled: true,
-    dailyTarget: 18000,
+    monthly: 440000,
+    sellingDays: 24,
+    notes: "Imprensa (2019) descreve a loja do Centro como tão grande quanto ou maior que a home center da Aldeota; horário público é mais curto, então o MOCK mensal fica um pouco abaixo da Aldeota.",
     manager: manager("mgr-centro", "Camila Freitas", "+55 85 99105-0505"),
   }),
   commercial({
@@ -97,7 +136,9 @@ export const MOCK_STORES: StoreProfile[] = [
     publicHours: "Seg–Sex 9h–18h; Sáb 9h–13h; Dom fechada",
     unitType: "CONCEPT_STORE",
     reportEnabled: true,
-    dailyTarget: 16000,
+    monthly: 220000,
+    sellingDays: 23,
+    notes: "Porte público ~500–600 m² (O Povo, 2019) contra ~2.000 m² de venda da home center Aldeota. MOCK mensal proporcional, mix premium.",
     manager: manager("mgr-conceito", "Eduardo Pires", "+55 85 99108-0808"),
   }),
   commercial({
@@ -110,7 +151,8 @@ export const MOCK_STORES: StoreProfile[] = [
     publicHours: "Seg–Sex 8h–18h; Sáb 8h–15h; Dom fechada",
     unitType: "STORE",
     reportEnabled: true,
-    dailyTarget: 15000,
+    monthly: 300000,
+    sellingDays: 24,
     manager: manager("mgr-caucaia", "Diego Azevedo", "+55 85 99106-0606"),
   }),
   commercial({
@@ -123,7 +165,9 @@ export const MOCK_STORES: StoreProfile[] = [
     publicHours: "Seg–Sex 8h–19h; Sáb 8h–15h; Dom fechada",
     unitType: "STORE",
     reportEnabled: true,
-    dailyTarget: 17000,
+    monthly: 360000,
+    sellingDays: 24,
+    notes: "Imprensa citou R$ 24–30 mi/ano na inauguração (projeção de investimento, não balanço). MOCK ficou abaixo disso e abaixo da Aldeota, alinhado à âncora interna.",
     manager: manager("mgr-maracanau", "Beatriz Ramos", "+55 85 99107-0707"),
   }),
   commercial({
@@ -136,7 +180,8 @@ export const MOCK_STORES: StoreProfile[] = [
     publicHours: "Seg–Sex 8h–18:30; Sáb 8h–13h; Dom fechada",
     unitType: "SHOWROOM",
     reportEnabled: true,
-    dailyTarget: 12000,
+    monthly: 200000,
+    sellingDays: 23,
     notes: "Site atual lista como Loja Junco. Imprensa de 2024 descreve showroom/primeira franquia — modelo INDICADO, não classificação corporativa definitiva.",
     manager: manager("mgr-sobral", "Lívia Castro", "+55 88 99109-0909"),
   }),
@@ -150,7 +195,8 @@ export const MOCK_STORES: StoreProfile[] = [
     publicHours: "Seg–Sex 8h–19h; Sáb 8h–16h; Dom fechada",
     unitType: "STORE",
     reportEnabled: true,
-    dailyTarget: 11000,
+    monthly: 185000,
+    sellingDays: 24,
     notes: "Unidade pública confirmada. Tipo operacional (própria/franquia) INTERNAL_PENDING.",
     manager: manager("mgr-aracati", "Thiago Nogueira", "+55 88 99110-1010"),
   }),
@@ -164,7 +210,8 @@ export const MOCK_STORES: StoreProfile[] = [
     publicHours: "Seg–Sex 8h–19h; Sáb 8h–16h; Dom fechada",
     unitType: "STORE",
     reportEnabled: true,
-    dailyTarget: 10000,
+    monthly: 165000,
+    sellingDays: 24,
     notes: "Unidade pública confirmada. Tipo operacional (própria/franquia) INTERNAL_PENDING.",
     manager: manager("mgr-limoeiro", "Sofia Barros", "+55 88 99111-1111"),
   }),
@@ -181,6 +228,8 @@ export const MOCK_STORES: StoreProfile[] = [
     status: "ACTIVE",
     reportEnabled: false,
     timezone: "America/Fortaleza",
+    monthlyTarget: 0,
+    sellingDays: 22,
     dailyTarget: 0,
     manager: manager("mgr-admin", "Equipe administrativa (simulado)", "+55 85 99112-0000"),
     sourceStatus: "PUBLIC_CONFIRMED",
@@ -201,6 +250,8 @@ export const MOCK_STORES: StoreProfile[] = [
     status: "ACTIVE",
     reportEnabled: false,
     timezone: "America/Fortaleza",
+    monthlyTarget: 0,
+    sellingDays: 24,
     dailyTarget: 0,
     manager: manager("mgr-cd", "Operação de CD (simulado)", "+55 85 99113-0000"),
     sourceStatus: "PUBLIC_CONFIRMED",
@@ -221,6 +272,8 @@ export const MOCK_STORES: StoreProfile[] = [
     status: "INACTIVE",
     reportEnabled: false,
     timezone: "America/Fortaleza",
+    monthlyTarget: 0,
+    sellingDays: 0,
     dailyTarget: 0,
     manager: manager("mgr-eusebio", "A validar", "-"),
     sourceStatus: "CONFLICTING",

@@ -12,7 +12,7 @@ export default async function IndicatorsPage() {
       <PageHeader
         eyebrow="Indicadores"
         title="Leitura por loja"
-        description="Nomes das lojas são públicos. Valores de venda, meta, estoque e clientes são 100% simulados."
+        description="Nomes das lojas são públicos. Faturamento mensal é simulado na ordem de grandeza de home center; o relatório matinal continua em D-1."
       />
       <Card className="mb-4">
         <CardTitle>Atingimento por loja</CardTitle>
@@ -28,8 +28,8 @@ export default async function IndicatorsPage() {
           <thead className="text-[11px] uppercase tracking-[0.14em] text-text-subtle">
             <tr>
               <th className="px-5 pb-3 pt-5 font-medium">Loja</th>
-              <th className="px-5 pb-3 pt-5 font-medium">Vendas</th>
-              <th className="px-5 pb-3 pt-5 font-medium">Meta</th>
+              <th className="px-5 pb-3 pt-5 font-medium">Vendas mês</th>
+              <th className="px-5 pb-3 pt-5 font-medium">Meta mês</th>
               <th className="px-5 pb-3 pt-5 font-medium">Atingimento</th>
               <th className="px-5 pb-3 pt-5 font-medium">Zerados</th>
               <th className="px-5 pb-3 pt-5 font-medium">Novos</th>
@@ -37,15 +37,15 @@ export default async function IndicatorsPage() {
             </tr>
           </thead>
           <tbody>
-            {rows.map(({ store, metrics }) => (
-              <tr key={store.id} className="border-t border-border">
-                <td className="px-5 py-4">{store.name}</td>
-                <td className="number px-5 py-4">{formatCurrency(metrics.sales.actual)}</td>
-                <td className="number px-5 py-4 text-text-muted">{formatCurrency(metrics.sales.target)}</td>
-                <td className="number px-5 py-4">{formatPercent(metrics.sales.achievementPercentage)}</td>
-                <td className="px-5 py-4">{metrics.inventory.outOfStockItems.length}</td>
-                <td className="px-5 py-4">{metrics.customers.newCustomers}</td>
-                <td className="px-5 py-4">{metrics.customers.inactiveCustomers}</td>
+            {rows.map((row) => (
+              <tr key={row.store.id} className="border-t border-border">
+                <td className="px-5 py-4">{row.store.name}</td>
+                <td className="number px-5 py-4">{formatCurrency(row.monthlySales)}</td>
+                <td className="number px-5 py-4 text-text-muted">{formatCurrency(row.monthlyTarget)}</td>
+                <td className="number px-5 py-4">{formatPercent(row.metrics.sales.achievementPercentage)}</td>
+                <td className="px-5 py-4">{row.metrics.inventory.outOfStockItems.length}</td>
+                <td className="px-5 py-4">{row.metrics.customers.newCustomers}</td>
+                <td className="px-5 py-4">{row.metrics.customers.inactiveCustomers}</td>
               </tr>
             ))}
           </tbody>

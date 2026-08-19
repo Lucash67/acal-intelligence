@@ -60,8 +60,8 @@ export default async function StoresPage() {
                         <dd>{store.manager.name}</dd>
                       </div>
                       <div className="flex justify-between gap-4">
-                        <dt className="text-text-muted">Meta diária (simulada)</dt>
-                        <dd className="number">{formatCurrency(store.dailyTarget)}</dd>
+                        <dt className="text-text-muted">Meta mensal (simulada)</dt>
+                        <dd className="number">{formatCurrency(store.monthlyTarget)}</dd>
                       </div>
                     </>
                   ) : null}

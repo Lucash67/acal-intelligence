@@ -22,6 +22,8 @@ export type StoreProfile = {
   status: StoreStatus;
   reportEnabled: boolean;
   timezone: string;
+  monthlyTarget: number;
+  sellingDays: number;
   dailyTarget: number;
   manager: ManagerProfile;
   sourceStatus: DataProvenance;
@@ -30,6 +32,10 @@ export type StoreProfile = {
   erpCode: null;
   biCode: null;
 };
+
+export function projectMonthly(store: Pick<StoreProfile, "sellingDays">, dailyValue: number): number {
+  return Math.round(dailyValue * store.sellingDays);
+}
 
 export function isReportableStore(store: StoreProfile): boolean {
   return (
