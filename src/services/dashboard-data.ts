@@ -1,6 +1,6 @@
 import { toIsoDate } from "@/lib/dates";
-import { getNextScheduledRun } from "@/jobs/schedules";
-import { env, isDatabaseConfigured, isMockMode, isOpenAiConfigured } from "@/lib/env";
+import { AUTOMATION_SCHEDULES, getNextScheduledRun } from "@/jobs/schedules";
+import { env, isDatabaseConfigured, isMockMode, isOpenAiConfigured, isZapiConfigured } from "@/lib/env";
 import { listDeliveries, listExecutions, listLogs, listReports, listStores } from "@/repositories";
 import { isReportableStore } from "@/domain/store";
 import { d1Date, getStoreSalesSnapshot } from "@/services/sales-snapshot";
@@ -52,11 +52,43 @@ export async function getIndicators() {
   });
 }
 
+export async function getAutomationCycles() {
+  const [executions, deliveries, stores] = await Promise.all([
+    listExecutions(),
+    listDeliveries(),
+    listStores(),
+  ]);
+
+  return AUTOMATION_SCHEDULES.map((schedule) => {
+    const periodExecutions = executions.filter((item) => item.reportType === schedule.period);
+    const latest = periodExecutions[0] ?? null;
+    const batch = latest
+      ? periodExecutions.filter((item) => item.referenceDate === latest.referenceDate)
+      : [];
+
+    return {
+      schedule,
+      latest,
+      success: batch.filter((item) => item.status === "SUCCESS").length,
+      failed: batch.filter((item) => item.status === "FAILED").length,
+      sent: deliveries.filter(
+        (item) => batch.some((execution) => execution.id === item.executionId) && item.status === "SUCCESS",
+      ).length,
+      rows: batch.slice(0, 8).map((execution) => ({
+        execution,
+        storeName: stores.find((store) => store.id === execution.storeId)?.name ?? execution.storeId,
+        delivery: deliveries.find((item) => item.executionId === execution.id) ?? null,
+      })),
+    };
+  });
+}
+
 export function getRuntimeConfig() {
   return {
     mockMode: isMockMode(),
     databaseConfigured: isDatabaseConfigured(),
     openaiConfigured: isOpenAiConfigured(),
+    zapiConfigured: isZapiConfigured(),
     dataSourceProvider: env.dataSourceProvider,
     aiProvider: isOpenAiConfigured() && env.aiProvider === "openai" ? "openai" : "mock",
     messagingProvider: "mock",

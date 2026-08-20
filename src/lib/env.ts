@@ -28,3 +28,7 @@ export function isOpenAiConfigured(): boolean {
 export function isMockMode(): boolean {
   return env.mockMode || env.dataSourceProvider === "mock";
 }
+
+export function isZapiConfigured(): boolean {
+  return Boolean(env.zapiInstanceId && env.zapiToken && env.zapiClientToken);
+}

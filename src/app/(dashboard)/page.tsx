@@ -5,6 +5,7 @@ import { Badge, statusTone } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Stat } from "@/components/ui/stat";
 import { formatDateTimeBr, periodLabel } from "@/lib/dates";
+import { deliveryKey } from "@/lib/demo-keys";
 import { statusLabel } from "@/lib/labels";
 import { getOverviewData } from "@/services/dashboard-data";
 
@@ -70,7 +71,12 @@ export default async function OverviewPage() {
                 {data.executions.map((execution) => (
                   <tr key={execution.id} className="border-t border-border">
                     <td className="py-3">
-                      {data.stores.find((store) => store.id === execution.storeId)?.name ?? execution.storeId}
+                      <Link
+                        href={`/entregas/${deliveryKey(execution.storeId, execution.reportType, execution.referenceDate)}`}
+                        className="text-accent"
+                      >
+                        {data.stores.find((store) => store.id === execution.storeId)?.name ?? execution.storeId}
+                      </Link>
                     </td>
                     <td className="py-3 text-text-muted">{periodLabel(execution.reportType)}</td>
                     <td className="py-3">

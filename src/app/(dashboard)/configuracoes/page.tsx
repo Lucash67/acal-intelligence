@@ -14,7 +14,7 @@ export default function SettingsPage() {
       <PageHeader
         eyebrow="Configurações"
         title="Ambiente de desenvolvimento"
-        description="Nenhuma credencial é exibida. Integrações reais ficam desligadas até a definição com Acal/TI."
+        description="Nenhuma credencial é exibida. Supabase e Z-API só entram quando você passar as chaves. Dado real da Acal continua fora."
       />
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="lg:col-span-2">
@@ -39,9 +39,10 @@ export default function SettingsPage() {
           </div>
         </Card>
         <Card className="lg:col-span-2">
-          <CardTitle>Prontidão do MVP (fase 2)</CardTitle>
+          <CardTitle>Prontidão do fluxo mock</CardTitle>
           <p className="mb-4 text-sm text-text-muted">
-            Tudo abaixo é demonstrável com mock. Integração real fica para a fase 3, depois da validação.
+            O produto precisa fechar o ciclo com dados imaginários. Banco (Supabase) e Z-API entram quando as
+            credenciais existirem — ainda sem dado real da Acal.
           </p>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
@@ -53,13 +54,13 @@ export default function SettingsPage() {
               </thead>
               <tbody>
                 <ReadyRow item="Estrutura pública das unidades" state="Pronto" tone="success" />
-                <ReadyRow item="Pipeline BUSCA → CALCULA → ANALISA → MONTA → ENVIA → REGISTRA" state="Pronto" tone="success" />
-                <ReadyRow item="Relatório matinal e vespertino" state="Pronto" tone="success" />
-                <ReadyRow item="Card 1080×1350 e preview de WhatsApp" state="Pronto" tone="success" />
+                <ReadyRow item="Esteira visível: busca → calcula → analisa → monta → envia → registra" state="Pronto" tone="success" />
+                <ReadyRow item="Caixa de saída WhatsApp (texto + card simulados)" state="Pronto" tone="success" />
                 <ReadyRow item="Falha isolada por loja" state="Pronto" tone="success" />
-                <ReadyRow item="PNG via Playwright no servidor" state="Pendente de validação" tone="warning" />
-                <ReadyRow item="Regras oficiais de meta, estoque e ranking" state="Pendente de validação" tone="warning" />
-                <ReadyRow item="Fonte de dados, WhatsApp e TI de produção" state="Dependente da TI" tone="warning" />
+                <ReadyRow item="PNG via Playwright no servidor" state="Pendente no ambiente" tone="warning" />
+                <ReadyRow item="Supabase para o histórico não sumir" state="Aguardando URL" tone="warning" />
+                <ReadyRow item="Z-API no seu número de teste" state="Aguardando credenciais" tone="warning" />
+                <ReadyRow item="Fonte corporativa e WhatsApp de gerente" state="Depois da validação do fluxo" tone="warning" />
               </tbody>
             </table>
           </div>
@@ -86,7 +87,15 @@ export default function SettingsPage() {
               ok={config.openaiConfigured}
               detail={config.openaiConfigured ? "OPENAI_API_KEY detectada" : "Ausente — provedor simulado"}
             />
-            <Line label="Z-API" ok={false} detail="Desabilitado nesta fase" />
+            <Line
+              label="Z-API"
+              ok={config.zapiConfigured}
+              detail={
+                config.zapiConfigured
+                  ? "Credenciais detectadas — envio real ainda desligado até o teste combinado"
+                  : "Ausente — caixa de saída continua simulada"
+              }
+            />
           </div>
         </Card>
         <Card className="lg:col-span-2">

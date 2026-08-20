@@ -61,3 +61,10 @@ export async function createLog(log: SystemLog): Promise<SystemLog> {
   getMemoryState().logs.unshift(log);
   return log;
 }
+
+export async function listLogsByExecutionId(executionId: string): Promise<SystemLog[]> {
+  const logs = await listLogs();
+  return logs
+    .filter((item) => item.executionId === executionId)
+    .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+}

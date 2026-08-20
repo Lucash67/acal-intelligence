@@ -99,6 +99,7 @@ export default async function ReportDetailPage({
           <WhatsAppDeliveryPreview
             report={report}
             recipient={delivery?.recipient ?? "Destinatário simulado"}
+            sent={delivery?.status === "SUCCESS"}
           />
         </div>
       </div>

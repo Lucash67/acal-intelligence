@@ -13,8 +13,8 @@ export default async function DeliveriesPage() {
     <div>
       <PageHeader
         eyebrow="Entregas"
-        title="Histórico de distribuição"
-        description="Envios simulados pelo MockMessagingProvider. Nenhum WhatsApp real é disparado."
+        title="Caixa de saída"
+        description="Cada disparo registra texto + card 1080×1350 no WhatsApp simulado. Nenhum número real recebe mensagem até a Z-API ser ligada no seu teste."
       />
       <Card className="overflow-x-auto p-0">
         <table className="w-full text-left text-sm">
@@ -22,11 +22,10 @@ export default async function DeliveriesPage() {
             <tr>
               <th className="px-5 pb-3 pt-5 font-medium">Loja</th>
               <th className="px-5 pb-3 pt-5 font-medium">Destinatário</th>
-              <th className="px-5 pb-3 pt-5 font-medium">Canal</th>
+              <th className="px-5 pb-3 pt-5 font-medium">Payload</th>
               <th className="px-5 pb-3 pt-5 font-medium">Horário</th>
-              <th className="px-5 pb-3 pt-5 font-medium">Tentativas</th>
               <th className="px-5 pb-3 pt-5 font-medium">Status</th>
-              <th className="px-5 pb-3 pt-5 font-medium">Preview</th>
+              <th className="px-5 pb-3 pt-5 font-medium">Disparo</th>
             </tr>
           </thead>
           <tbody>
@@ -34,23 +33,23 @@ export default async function DeliveriesPage() {
               const store = stores.find((item) => item.id === delivery.storeId);
               return (
                 <tr key={delivery.id} className="border-t border-border">
-                  <td className="px-5 py-4">
-                    <Link href={`/entregas/${delivery.id}`} className="text-accent">
-                      {store?.name ?? delivery.storeId}
-                    </Link>
+                  <td className="px-5 py-4">{store?.name ?? delivery.storeId}</td>
+                  <td className="px-5 py-4 text-text-muted">
+                    <div>{store?.manager.name ?? "Gerente simulado"}</div>
+                    <div className="font-mono text-xs">{delivery.recipient}</div>
                   </td>
-                  <td className="px-5 py-4 text-text-muted">{delivery.recipient}</td>
-                  <td className="px-5 py-4">{statusLabel(delivery.channel)}</td>
+                  <td className="px-5 py-4 text-text-muted">
+                    {delivery.status === "SUCCESS" ? "Texto + card" : "Não gerado"}
+                  </td>
                   <td className="px-5 py-4 text-text-muted">
                     {delivery.sentAt ? formatDateTimeBr(delivery.sentAt) : "—"}
                   </td>
-                  <td className="px-5 py-4">{delivery.attempts}</td>
                   <td className="px-5 py-4">
                     <Badge tone={statusTone(delivery.status)}>{statusLabel(delivery.status)}</Badge>
                   </td>
                   <td className="px-5 py-4">
                     <Link href={`/entregas/${delivery.id}`} className="text-accent">
-                      Ver disparo
+                      Abrir
                     </Link>
                   </td>
                 </tr>
