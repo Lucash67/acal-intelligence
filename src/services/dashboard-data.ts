@@ -2,9 +2,8 @@ import { toIsoDate } from "@/lib/dates";
 import { getNextScheduledRun } from "@/jobs/schedules";
 import { env, isDatabaseConfigured, isMockMode, isOpenAiConfigured } from "@/lib/env";
 import { listDeliveries, listExecutions, listLogs, listReports, listStores } from "@/repositories";
-import { computeStoreMetrics } from "@/services/analytics-engine";
-import { isReportableStore, projectMonthly } from "@/domain/store";
-import { getMockStoreRawData } from "@/mocks/raw-data";
+import { isReportableStore } from "@/domain/store";
+import { d1Date, getStoreSalesSnapshot } from "@/services/sales-snapshot";
 
 export async function getOverviewData() {
   const [stores, executions, deliveries, reports, logs] = await Promise.all([
@@ -42,15 +41,13 @@ export async function getOverviewData() {
 
 export async function getIndicators() {
   const stores = await listStores();
-  const today = toIsoDate();
+  const referenceDate = d1Date();
 
   return stores.filter(isReportableStore).map((store) => {
-    const metrics = computeStoreMetrics(getMockStoreRawData(store.id, "MORNING", today));
+    const snapshot = getStoreSalesSnapshot(store, referenceDate);
     return {
       store,
-      metrics,
-      monthlySales: projectMonthly(store, metrics.sales.actual),
-      monthlyTarget: store.monthlyTarget,
+      ...snapshot,
     };
   });
 }

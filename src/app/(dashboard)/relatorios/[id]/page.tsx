@@ -7,7 +7,8 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { periodLabel, periodScopeLabel } from "@/lib/dates";
 import { deliveryKey, parseExecutionKey } from "@/lib/demo-keys";
 import { formatCurrency, formatPercent } from "@/lib/format";
-import { getDeliveryById, getReportById } from "@/repositories";
+import { getDeliveryById, getReportById, getStoreById } from "@/repositories";
+import { getStoreSalesSnapshot, salesPeriodLabels } from "@/services/sales-snapshot";
 
 export default async function ReportDetailPage({
   params,
@@ -32,17 +33,20 @@ export default async function ReportDetailPage({
       </div>
     );
   }
+  const store = await getStoreById(report.storeId);
+  const snapshot = store ? getStoreSalesSnapshot(store) : null;
   const parsed = parseExecutionKey(report.executionId);
   const delivery = parsed
     ? await getDeliveryById(deliveryKey(parsed.storeId, parsed.period, parsed.date))
     : null;
+  const labels = salesPeriodLabels(report.period);
 
   return (
     <div>
       <PageHeader
         eyebrow="Visualização"
         title={report.title}
-        description={`${periodScopeLabel(report.period)}. Card 1080×1350 preparado para WhatsApp. Os números não vêm do texto da IA.`}
+        description={`${periodScopeLabel(report.period)}. Card 1080×1350 preparado para WhatsApp. Vendas do card são do recorte operacional; a projeção mês é a mesma do módulo Indicadores.`}
         action={
           <Link href="/relatorios" className="text-sm text-accent">
             Voltar
@@ -71,9 +75,15 @@ export default async function ReportDetailPage({
           <Card>
             <CardTitle>Métricas oficiais</CardTitle>
             <dl className="space-y-3 text-sm">
-              <Item label="Vendas" value={formatCurrency(report.metrics.sales.actual)} />
-              <Item label="Meta" value={formatCurrency(report.metrics.sales.target)} />
+              <Item label={labels.sales} value={formatCurrency(report.metrics.sales.actual)} />
+              <Item label={labels.target} value={formatCurrency(report.metrics.sales.target)} />
               <Item label="Atingimento" value={formatPercent(report.metrics.sales.achievementPercentage)} />
+              {snapshot ? (
+                <>
+                  <Item label="Projeção mês" value={formatCurrency(snapshot.monthlySales)} />
+                  <Item label="Meta mês" value={formatCurrency(snapshot.monthlyTarget)} />
+                </>
+              ) : null}
               <Item label="Novos clientes" value={String(report.metrics.customers.newCustomers)} />
               <Item label="Inativos" value={String(report.metrics.customers.inactiveCustomers)} />
             </dl>

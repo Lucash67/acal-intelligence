@@ -27,10 +27,10 @@ export function ExecutiveReportCard({ report }: { report: ExecutiveReport }) {
         </div>
         <div className="grid grid-cols-3 gap-2">
           <Kpi
-            label={metrics.period === "AFTERNOON" ? "Vendas parciais" : "Vendas"}
+            label={metrics.period === "AFTERNOON" ? "Vendas parciais" : "Vendas D-1"}
             value={formatCurrency(metrics.sales.actual)}
           />
-          <Kpi label="Meta" value={formatCurrency(metrics.sales.target)} />
+          <Kpi label="Meta do dia" value={formatCurrency(metrics.sales.target)} />
           <Kpi label="Atingimento" value={formatPercent(achievement)} valueClass={achievementClass} />
         </div>
         <div className="grid grid-cols-2 gap-2">

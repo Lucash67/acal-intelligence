@@ -155,11 +155,11 @@ export function renderExecutiveReportHtml(report: ExecutiveReport): string {
       </div>
       <div class="hero">
         <div class="kpi">
-          <span>${metrics.period === "AFTERNOON" ? "Vendas parciais" : "Vendas"}</span>
+          <span>${metrics.period === "AFTERNOON" ? "Vendas parciais" : "Vendas D-1"}</span>
           <strong>${formatCurrency(metrics.sales.actual)}</strong>
         </div>
         <div class="kpi">
-          <span>Meta</span>
+          <span>Meta do dia</span>
           <strong>${formatCurrency(metrics.sales.target)}</strong>
         </div>
         <div class="kpi">

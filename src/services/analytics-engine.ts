@@ -5,7 +5,7 @@ function roundPercent(value: number): number {
   return Math.round(value * 10) / 10;
 }
 
-function achievement(actual: number, target: number): number {
+export function achievementPercent(actual: number, target: number): number {
   if (target <= 0) return 0;
   return roundPercent((actual / target) * 100);
 }
@@ -16,7 +16,7 @@ function toConsultantMetric(input: StoreRawData["consultants"][number]): Consult
     name: input.name,
     sales: input.sales,
     target: input.target,
-    achievementPercentage: achievement(input.sales, input.target),
+    achievementPercentage: achievementPercent(input.sales, input.target),
     conversionRate: input.conversionRate,
     status: input.status,
   };
@@ -67,7 +67,7 @@ export function computeStoreMetrics(raw: StoreRawData): StoreMetrics {
     sales: {
       target: raw.sales.target,
       actual: raw.sales.actual,
-      achievementPercentage: achievement(raw.sales.actual, raw.sales.target),
+      achievementPercentage: achievementPercent(raw.sales.actual, raw.sales.target),
     },
     consultants: {
       topPerformers: consultants.slice(0, 3),

@@ -7,14 +7,13 @@ import { Badge, statusTone } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { provenanceLabel, unitTypeLabel } from "@/domain/provenance";
 import { isReportableStore } from "@/domain/store";
-import { periodLabel, toIsoDate } from "@/lib/dates";
+import { periodLabel } from "@/lib/dates";
 import { statusLabel } from "@/lib/labels";
-import { formatCurrency, formatPercent } from "@/lib/format";
-import { getMockStoreRawData } from "@/mocks/raw-data";
+import { formatCurrency } from "@/lib/format";
 import { listExecutions, getStoreById } from "@/repositories";
 import { buildMockAnalysis } from "@/providers/ai/mock-ai-provider";
-import { computeStoreMetrics } from "@/services/analytics-engine";
 import { ReportGenerator } from "@/services/report-generator";
+import { getStoreSalesSnapshot } from "@/services/sales-snapshot";
 
 export default async function StoreDetailPage({
   params,
@@ -27,9 +26,8 @@ export default async function StoreDetailPage({
 
   const reportable = isReportableStore(store);
   const executions = (await listExecutions()).filter((item) => item.storeId === store.id);
-  const metrics = reportable
-    ? computeStoreMetrics(getMockStoreRawData(store.id, "MORNING", toIsoDate()))
-    : null;
+  const snapshot = reportable ? getStoreSalesSnapshot(store) : null;
+  const metrics = snapshot?.metrics ?? null;
   const preview = metrics ? new ReportGenerator().generate(metrics, buildMockAnalysis(metrics)) : null;
 
   return (
@@ -76,24 +74,24 @@ export default async function StoreDetailPage({
           <p className="text-sm text-text-muted">{store.notes}</p>
         </Card>
       ) : null}
-      {metrics && preview ? (
+      {snapshot && preview ? (
         <>
           <div className="mb-6 grid gap-4 md:grid-cols-4">
             <Card>
-              <CardTitle>Meta mensal simulada</CardTitle>
-              <p className="number text-3xl">{formatCurrency(store.monthlyTarget)}</p>
-            </Card>
-            <Card>
-              <CardTitle>Meta diária simulada</CardTitle>
-              <p className="number text-3xl">{formatCurrency(store.dailyTarget)}</p>
-            </Card>
-            <Card>
               <CardTitle>Vendas D-1 simuladas</CardTitle>
-              <p className="number text-3xl">{formatCurrency(metrics.sales.actual)}</p>
+              <p className="number text-3xl">{formatCurrency(snapshot.dailySales)}</p>
             </Card>
             <Card>
-              <CardTitle>Atingimento simulado</CardTitle>
-              <p className="number text-3xl">{formatPercent(metrics.sales.achievementPercentage)}</p>
+              <CardTitle>Meta do dia simulada</CardTitle>
+              <p className="number text-3xl">{formatCurrency(snapshot.dailyTarget)}</p>
+            </Card>
+            <Card>
+              <CardTitle>Projeção mês simulada</CardTitle>
+              <p className="number text-3xl">{formatCurrency(snapshot.monthlySales)}</p>
+            </Card>
+            <Card>
+              <CardTitle>Meta mensal simulada</CardTitle>
+              <p className="number text-3xl">{formatCurrency(snapshot.monthlyTarget)}</p>
             </Card>
           </div>
           <div className="grid items-start gap-6 xl:grid-cols-[1fr_360px]">
