@@ -7,6 +7,8 @@ function isPublic(pathname: string) {
   if (PUBLIC_PATHS.includes(pathname)) return true;
   if (pathname.startsWith("/brand/")) return true;
   if (pathname.startsWith("/_next/")) return true;
+  if (pathname === "/favicon.ico" || pathname === "/icon" || pathname === "/apple-icon") return true;
+  if (pathname.startsWith("/icon.") || pathname.startsWith("/apple-icon.")) return true;
   return false;
 }
 
