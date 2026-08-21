@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { getRequestSession } from "@/lib/auth-request";
 import { toIsoDate } from "@/lib/dates";
 import { listReportableStores } from "@/mocks/stores";
 import { runPipelineForStores, runReportPipeline } from "@/services/report-pipeline";
@@ -11,6 +12,14 @@ const bodySchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const session = await getRequestSession();
+  if (session.role !== "admin") {
+    return NextResponse.json(
+      { ok: false, error: "Esta etapa ainda não está liberada neste acesso." },
+      { status: 403 },
+    );
+  }
+
   try {
     const json = await request.json().catch(() => ({}));
     const body = bodySchema.parse(json);

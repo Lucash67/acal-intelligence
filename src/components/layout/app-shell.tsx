@@ -18,32 +18,38 @@ import {
 } from "lucide-react";
 import { BrandLockup } from "@/components/brand/brand-lockup";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
+import { useAuth } from "@/components/auth/auth-provider";
 import { cn } from "@/lib/cn";
 
 const GROUPS = [
   {
     label: "Operação",
     items: [
-      { href: "/", label: "Visão geral", icon: LayoutDashboard },
-      { href: "/relatorios", label: "Relatórios", icon: FileText },
-      { href: "/automacoes", label: "Automações", icon: Timer },
-      { href: "/lojas", label: "Unidades", icon: Building2 },
-      { href: "/indicadores", label: "Indicadores", icon: BarChart3 },
+      { href: "/", label: "Visão geral", icon: LayoutDashboard, preview: true },
+      { href: "/relatorios", label: "Relatórios", icon: FileText, preview: true },
+      { href: "/automacoes", label: "Automações", icon: Timer, preview: false },
+      { href: "/lojas", label: "Unidades", icon: Building2, preview: true },
+      { href: "/indicadores", label: "Indicadores", icon: BarChart3, preview: true },
     ],
   },
   {
     label: "Sistema",
     items: [
-      { href: "/entregas", label: "Entregas", icon: Truck },
-      { href: "/logs", label: "Registros", icon: ScrollText },
-      { href: "/configuracoes", label: "Configurações", icon: Settings },
+      { href: "/entregas", label: "Entregas", icon: Truck, preview: true },
+      { href: "/logs", label: "Registros", icon: ScrollText, preview: false },
+      { href: "/configuracoes", label: "Configurações", icon: Settings, preview: false },
     ],
   },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { role } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const groups = GROUPS.map((group) => ({
+    ...group,
+    items: group.items.filter((item) => role === "admin" || item.preview),
+  })).filter((group) => group.items.length > 0);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -102,7 +108,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
 
         <nav className="min-h-0 flex-1 space-y-5 overflow-y-auto px-3 pb-3">
-          {GROUPS.map((group) => (
+          {groups.map((group) => (
             <div key={group.label}>
               <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--sidebar-muted)]">
                 {group.label}
@@ -141,6 +147,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </p>
           <ThemeSwitcher compact surface="sidebar" />
           <LogoutLink />
+          {role === "preview" ? (
+            <p className="mt-3 px-1 text-[11px] leading-relaxed text-[var(--sidebar-muted)]">
+              Acesso de prévia. Novas etapas serão liberadas aos poucos.
+            </p>
+          ) : null}
         </div>
       </aside>
 

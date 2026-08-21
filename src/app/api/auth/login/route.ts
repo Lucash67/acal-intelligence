@@ -1,12 +1,6 @@
-import { createHash, timingSafeEqual } from "crypto";
 import { NextResponse } from "next/server";
+import { authenticateUser } from "@/lib/auth-users";
 import { createSessionToken, getAuthSecret, isAuthConfigured, sessionCookieOptions, SESSION_COOKIE } from "@/lib/auth-session";
-
-function hashedEqual(left: string, right: string) {
-  const a = createHash("sha256").update(left).digest();
-  const b = createHash("sha256").update(right).digest();
-  return timingSafeEqual(a, b);
-}
 
 export async function POST(request: Request) {
   if (!isAuthConfigured()) {
@@ -14,20 +8,14 @@ export async function POST(request: Request) {
   }
 
   const body = (await request.json().catch(() => ({}))) as { username?: string; password?: string };
-  const username = body.username?.trim() ?? "";
-  const password = body.password ?? "";
-  const expectedUser = process.env.AUTH_USERNAME?.trim() || "acal";
-  const expectedPassword = process.env.AUTH_PASSWORD ?? "";
+  const account = authenticateUser(body.username?.trim() ?? "", body.password ?? "");
 
-  const userOk = hashedEqual(username.toLowerCase(), expectedUser.toLowerCase());
-  const passOk = hashedEqual(password, expectedPassword);
-
-  if (!userOk || !passOk) {
+  if (!account) {
     return NextResponse.json({ ok: false, error: "Usuário ou senha inválidos." }, { status: 401 });
   }
 
-  const token = await createSessionToken(expectedUser, getAuthSecret());
-  const response = NextResponse.json({ ok: true });
+  const token = await createSessionToken(account.username, account.role, getAuthSecret());
+  const response = NextResponse.json({ ok: true, role: account.role });
   response.cookies.set(SESSION_COOKIE, token, sessionCookieOptions());
   return response;
 }

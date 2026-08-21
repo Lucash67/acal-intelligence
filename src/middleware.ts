@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { canAccessPath } from "@/lib/access";
 import { getAuthSecret, isAuthConfigured, readSessionToken, SESSION_COOKIE } from "@/lib/auth-session";
 
 const PUBLIC_PATHS = ["/login", "/api/auth/login", "/api/auth/logout", "/api/health", "/robots.txt"];
@@ -37,6 +38,16 @@ export async function middleware(request: NextRequest) {
     const login = new URL("/login", request.url);
     login.searchParams.set("next", pathname);
     return NextResponse.redirect(login);
+  }
+
+  if (!canAccessPath(session.role, pathname)) {
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json(
+        { ok: false, error: "Esta etapa ainda não está liberada neste acesso." },
+        { status: 403 },
+      );
+    }
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();

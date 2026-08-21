@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "@/components/auth/auth-provider";
 
 export function RunPipelineButton({
   storeId,
@@ -13,8 +14,11 @@ export function RunPipelineButton({
   label?: string;
 }) {
   const router = useRouter();
+  const { role } = useAuth();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+
+  if (role !== "admin") return null;
 
   async function run() {
     setLoading(true);
